@@ -22,13 +22,16 @@
 
 
 (asdf:defsystem :simple-tk
-  :description "A simple TCL/TK binding for common lisp."
-  :author "Andrej Vodopivec <andrej.vodopivec@gmail.com>"
-  :license "MIT"
-  :serial t
-  :depends-on (:cffi
-	       :split-sequence)
-  :components ((:file "package")
+    :description "A simple TCL/TK binding for common lisp."
+    :author "Andrej Vodopivec <andrej.vodopivec@gmail.com>"
+    :license "MIT"
+    :depends-on (:cffi
+                 :split-sequence)
+    :components
+    ((:module "src"
+              :serial t
+              :components
+              ((:file "package")
                (:file "cffi")
                (:file "variables")
                (:file "window")
@@ -45,4 +48,4 @@
                (:file "text")
                (:file "scrollbar")
                (:file "dialogs")
-               (:file "image")))
+               (:file "image")))))
