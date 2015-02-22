@@ -60,6 +60,7 @@ call @code{cnv addtag ntag withtag otag}.")
            :canvas-create-arc
            :canvas-create-bitmap
            :canvas-create-image
+           :canvas-create-line
            :canvas-create-oval
            :canvas-create-photo
            :canvas-create-poylgon

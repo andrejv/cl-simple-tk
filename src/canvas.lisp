@@ -138,6 +138,7 @@ Function FUN accepts one argument."
 (create-canvas-method canvas-create-oval      "oval")
 (create-canvas-method canvas-create-bitmap    "bitmap")
 (create-canvas-method canvas-create-image     "image")
+(create-canvas-method canvas-create-line      "line")
 
 (defun canvas-dchars (canvas tid first &optional last)
   "Deletes chars or coordinates from item TID given by range FIRST,LAST."
@@ -154,7 +155,10 @@ Function FUN accepts one argument."
 
 (defun canvas-find (canvas spec &rest args)
   "Returns ids of all items according to spec."
-  (get-response "~a find ~a ~{~a~^ ~}" (window-path canvas) spec args))
+  (let ((r (get-response "~a find ~a ~{~a~^ ~}" (window-path canvas) spec args)))
+    (if (string= r "")
+        ()
+        (split-sequence #\Space r))))
 
 (defmacro canvas-find-method ((name args) doc &body body)
   `(defun ,name ,(cons 'canvas args)
