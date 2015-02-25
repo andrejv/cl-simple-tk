@@ -35,8 +35,10 @@
 Orientation is defined with ORIENT key which can be \"vertical\" or
 \"horizontal\". The scrollbar is connected to windows using the
 SCROLLBAR-CONNECT function."
-  (let ((scrl (make-instance 'scrollbar :name "scrollbar"
+  (let ((scrl (make-instance 'scrollbar :name "ttk::scrollbar"
+                             :tk-name "scb"
                              :parent (getf options :parent)
+                             :tk-init (format nil "-orient ~a" (getf options :orient "vertical"))
                              :orient (getf options :orient "vertical"))))
     (configure-window scrl options)
     scrl))

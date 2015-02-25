@@ -64,7 +64,7 @@
   (let* ((f (tk:frame :parent nb))
          (fc (tk:frame :parent f))
          (cnv (tk:canvas :parent fc :bg "white" :relief "sunken"
-                          :borderwidth 2  :scrollregion '(-300 -300 300 300)))
+                         :borderwidth 2  :scrollregion '(-300 -300 300 300)))
          (hs (tk:scrollbar :orient "horizontal" :parent fc))
          (vs (tk:scrollbar :orient "vertical" :parent fc))
          (b (tk:button :text "Clear" :parent f))
@@ -121,7 +121,7 @@
     (tk:pack fc :expand "1" :fill "both")
     (tk:pack b)
     (tk:grid (list cnv vs) :sticky "nwes")
-    (tk:grid hs :row 1 :sticky "nwes")
+    (tk:grid hs :row 1 :column 0 :sticky "nwes")
     (tk:grid-col-configure fc 0 :weight 1)
     (tk:grid-row-configure fc 0 :weight 1)
     (tk:scrollbar-connect cnv hs)
