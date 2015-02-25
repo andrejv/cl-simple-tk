@@ -22,7 +22,8 @@
 
 (in-package :simple-tk)
 
-(define-tk-window (panedwindow "ttk::panedwindow" "pw" window))
+(define-tk-window (panedwindow "ttk::panedwindow" "pw" window
+                               :tk-init (format nil "-orient ~a" (or (getf options :orient) "vertical"))))
 
 (defun pw-pane-config (pw pid options)
   (loop for opt on options by #'cddr do

@@ -70,15 +70,19 @@
     :initarg :parent
     :initform nil
     :reader window-parent
-    :documentation "This window's parent.")))
+    :documentation "This window's parent.")
+   (tk-init
+    :initform nil
+    :initarg :tk-init
+    :documentation "Additional argument for the initialize function")))
 
 (defmethod initialize-instance :after ((w window) &key)
-  (with-slots (name tk-name id string-id path parent) w
+  (with-slots (name tk-name id string-id path parent tk-init) w
     (setf string-id (format nil "~a~a" (or tk-name "stk") id))
     (if parent
         (setf path (format nil "~a.~a" (window-path parent) string-id))
         (setf path (format nil ".~a" string-id)))
-    (send-command "~a ~a" name path)))
+    (send-command "~a ~a ~a" name path (or tk-init ""))))
 
 (defun bind-command (w fun)
    "Registers the command handler FUN for the window W.
@@ -112,7 +116,7 @@ Called from constructur functions."
        (let ((o (car option))
              (v (cadr option)))
          (case o
-           (:parent ) ;; handled elsewhere
+           ((:parent :orient)) ;; handled elsewhere
            (:command
             (bind-command w v))
            (:selected

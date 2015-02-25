@@ -22,7 +22,7 @@
 
 (in-package :simple-tk)
 
-(defmacro define-tk-window ((win name tk-name parent) &body body)
+(defmacro define-tk-window ((win name tk-name parent &key tk-init) &body body)
   `(progn
      (defclass ,win (,parent) ()
        (:documentation ,(concatenate 'string "This is a wrapper for the " name " class.
@@ -35,6 +35,7 @@ The undelying tcl/tk class is " (string name) ".")
        (let ((w (make-instance ',win
                                :name ,name
                                :tk-name ,tk-name
+                               :tk-init ,tk-init
                                :parent (getf options :parent))))
          (configure-window w options)
          ,@body
