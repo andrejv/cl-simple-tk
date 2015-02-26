@@ -64,7 +64,7 @@
   (let* ((f (tk:frame :parent nb))
          (fc (tk:frame :parent f))
          (cnv (tk:canvas :parent fc :bg "white" :relief "sunken"
-                         :borderwidth 2  :scrollregion '(-300 -300 300 300)))
+                         :borderwidth 2  :scrollregion '(-400 -400 400 400)))
          (hs (tk:scrollbar :orient "horizontal" :parent fc))
          (vs (tk:scrollbar :orient "vertical" :parent fc))
          (b (tk:button :text "Clear" :parent f))
