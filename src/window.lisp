@@ -56,6 +56,7 @@
     :documentation "The short description part of the pathname for current window.")
    (id
     :initform (next-id)
+    :initarg :id
     :reader window-id
     :documentation "Unique number across all windows.")
    (string-id
@@ -116,7 +117,7 @@ Called from constructur functions."
        (let ((o (car option))
              (v (cadr option)))
          (case o
-           ((:parent :orient)) ;; handled elsewhere
+           ((:parent :orient :tk-name)) ;; handled elsewhere
            (:command
             (bind-command w v))
            (:selected

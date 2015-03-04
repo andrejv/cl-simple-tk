@@ -78,3 +78,29 @@ callback."
             (funcall fun)
             (remhash id *event-table*)))
     (get-response "after idle \{call_lisp ~a\}" id)))
+
+(defun create-command (tk-name fun)
+  "Creates a TCL/TK command which will call the lisp function FUN."
+  (let ((id (format nil "cmd~a" (next-id))))
+    (setf (gethash id *event-table*) fun)
+    (send-command (format nil "proc ~a {args} {call_lisp ~a $args}" tk-name id))))
+
+#+darwin
+(defun tk-mac-about-panel ()
+  "Opens a standard about panel on OSX."
+  (send-command "::tk::mac::standardAboutPanel"))
+
+#+darwin
+(defun tk-mac-show-help (fun)
+  "Calls the function FUN from the help menu item on OSX."
+  (create-command "::tk::mac::ShowHelp" fun))
+
+#+darwin
+(defun tk-mac-show-preferences (fun)
+  "Calls the function FUN from the preferences menu item on OSX."
+  (create-command "::tk::mac::ShowPreferences" fun))
+
+#+darwin
+(defun tk-mac-quit (fun)
+  "Calls the function FUN from the quit meni item on OSX."
+  (create-command "::tk::mac::Quit" fun))

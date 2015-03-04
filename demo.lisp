@@ -223,6 +223,11 @@
            (file (tk:menu :parent mbar))
            (radios (tk:menu :parent file)))
       (setf (tk:window-minsize nil) (list 400 400))
+      ;; application menu on OSX - should be the first item to add
+      #+darwin (let ((apple (tk:menu :parent mbar :tk-name "apple")))
+                 (tk:menu-add-command apple "About" #'tk:tk-mac-about-panel)
+                 (tk:tk-mac-show-preferences (lambda (&rest args) (tk:message-box "No prefs")))
+                 (tk:menu-add-cascade mbar "" apple))
       (tk:menu-add-cascade mbar "File" file)
       (tk:menu-add-radio radios "Prvi" "radio" "prvi")
       (tk:menu-add-radio radios "Drugi" "radio" "drugi")
@@ -239,6 +244,10 @@
                            (lambda () (print (tk:get-save-file))))
       (tk:menu-add-separator file)
       (tk:menu-add-command file "Exit" (lambda () (tk:window-destroy nil)))
+      ;; help menu on OSX - should be the last thing added to menubar
+      #+darwin (let ((help (tk:menu :parent mbar :tk-name "help")))
+                 (tk:menu-add-cascade mbar "Help" help)
+                 (tk:tk-mac-show-help (lambda (&rest args) (tk:message-box "No help."))))
       (tk:menu-toplevel mbar)
       (tk:notebook-add nb (radio-frame nb) :text "Radio")
       (tk:notebook-add nb (scale-frame nb) :text "Scale")

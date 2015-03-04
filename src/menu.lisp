@@ -57,8 +57,9 @@ VARIABLE and VALUE are used to check if the radio is selected."
 
 (defun menu-add-cascade (m label submenu)
   "Adds a new SUBMENU to the menu M."
-  (send-command "~a add cascade -menu ~a -label ~s"
-                (window-path m) (window-path submenu) label))
+  (send-command "~a add cascade -menu ~a ~a"
+                (window-path m) (window-path submenu)
+                (if (string= label "") "" (format nil "-label ~s" label))))
 
 (defun menu-add-checkbutton (m label variable)
   "Adds a new checkbutton to the menu M.

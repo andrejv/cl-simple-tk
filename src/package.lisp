@@ -119,6 +119,7 @@ call @code{cnv addtag ntag withtag otag}.")
            :clipboard-get
            :combobox
            :configure-window
+           :create-command
            :entry
            :entry-bbox
            :entry-delete
@@ -269,6 +270,10 @@ call @code{cnv addtag ntag withtag otag}.")
            :text-yview
            :text-yview-moveto
            :text-yview-scroll
+           #+darwin :tk-mac-about-panel
+           #+darwin :tk-mac-show-help
+           #+darwin :tk-mac-show-preferences
+           #+darwin :tk-mac-quit
            :tk-version
            :toplevel
            :treeview
