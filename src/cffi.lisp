@@ -175,6 +175,7 @@ All code should be called from within WITH-TK."
             (*current-interp* (init-session)))
        (send-command (format nil "wm title . ~s" ,title))
        ,@body
+       (send-command "catch { console hide }")
        (tk-main-loop)
        (tcl-delete-interp *current-interp*))))
 
@@ -188,6 +189,7 @@ All code should be called from within WITH-TK."
             (*current-interp* (init-session)))
        (send-command (format nil "wm title . ~s" ,title))
        ,@body
+       (send-command "catch { console hide }")
        (tk-main-loop)
        (tcl-delete-interp *current-interp*))))
 
@@ -201,6 +203,7 @@ All code should be called from within WITH-TK."
                    (*current-interp* (init-session)))
               (send-command (format nil "wm title . ~s" ,title))
               ,@body
+              (send-command "catch { console hide }")
               (tk-main-loop)
               (tcl-delete-interp *current-interp*))))
      (let ((s (ccl:make-semaphore)))
