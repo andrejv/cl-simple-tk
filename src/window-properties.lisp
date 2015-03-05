@@ -32,17 +32,9 @@ The state can be modified with the setf macro."
   "Sets the state of the window W."
   (send-command "~a state ~a" (window-path w) spec))
 
-#+nil(defun window-selected (w)
-  "Returns t if the window W is selected.
-
-Can be used with the setf macro to select a window."
-  (string-equal "0" (window-state w "!selected")))
-
-(defun (setf window-selected) (val w)
-  "Sets the selected state of the window W."
-  (if val
-      (setf (window-state w) "selected")
-      (setf (window-state w) "!selected")))
+(defun window-instate (w spec)
+  "Checks if the window W is in state SPEC."
+  (string= "1" (get-response "~a instate ~a" (window-path w) spec)))
 
 (defun window-resizable (w)
   "Checks if the window W is resizable."

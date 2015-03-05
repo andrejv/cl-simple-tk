@@ -319,7 +319,6 @@ call @code{cnv addtag ntag withtag otag}.")
            :window-reqwidth
            :window-screenheight
            :window-screenwidth
-           :window-selected
            :window-state
            :window-width
            :window-withdraw
