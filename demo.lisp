@@ -217,12 +217,12 @@
     pw1))
 
 (defun demo ()
-  (tk:with-tk (:title "Demo")
-    (let* ((nb (tk:notebook))
-           (mbar (tk:menu))
+  (tk:with-tk-root (r :title "Demo")
+    (let* ((nb (tk:notebook :parent r))
+           (mbar (tk:menu :parent r))
            (file (tk:menu :parent mbar))
            (radios (tk:menu :parent file)))
-      (setf (tk:window-minsize nil) (list 400 400))
+      (setf (tk:window-minsize r) (list 400 400))
       ;; application menu on OSX - should be the first item to add
       #+darwin (let ((apple (tk:menu :parent mbar :tk-name "apple")))
                  (tk:menu-add-command apple "About" #'tk:tk-mac-about-panel)
@@ -244,12 +244,12 @@
       (tk:menu-add-command file "Save File"
                            (lambda () (print (tk:get-save-file))))
       (tk:menu-add-separator file)
-      (tk:menu-add-command file "Exit" (lambda () (tk:window-destroy nil)))
+      (tk:menu-add-command file "Exit" (lambda () (tk:window-destroy r)))
       ;; help menu on OSX - should be the last thing added to menubar
       #+darwin (let ((help (tk:menu :parent mbar :tk-name "help")))
                  (tk:menu-add-cascade mbar "Help" help)
                  (tk:tk-mac-show-help (lambda (&rest args) (tk:message-box "No help."))))
-      (tk:menu-toplevel mbar)
+      (tk:window-configure r :menu mbar)
       (tk:notebook-add nb (radio-frame nb) :text "Radio")
       (tk:notebook-add nb (scale-frame nb) :text "Scale")
       (tk:notebook-add nb (canvas-frame nb) :text "Canvas" :sticky "nsew")

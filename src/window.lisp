@@ -25,6 +25,9 @@
 (defvar *window-counter* 0
   "Counts the number of windows created.")
 
+(defvar *root-window* nil
+  "The root window.")
+
 (defun next-id ()
   "Computes id numbers for unique window names."
   (incf *window-counter*))
@@ -69,21 +72,26 @@
     :documentation "Tcl/tk path for the window.")
    (parent
     :initarg :parent
-    :initform nil
+    :initform *root-window*
     :reader window-parent
     :documentation "This window's parent.")
    (tk-init
     :initform nil
     :initarg :tk-init
-    :documentation "Additional argument for the initialize function")))
+    :documentation "Additional argument for the initialize function")
+   (tk-define
+    :initform t
+    :initarg :tk-define
+    :documentation "Should the window be defined.")))
 
 (defmethod initialize-instance :after ((w window) &key)
-  (with-slots (name tk-name id string-id path parent tk-init) w
-    (setf string-id (format nil "~a~a" (or tk-name "stk") id))
-    (if parent
-        (setf path (format nil "~a.~a" (window-path parent) string-id))
-        (setf path (format nil ".~a" string-id)))
-    (send-command "~a ~a ~a" name path (or tk-init ""))))
+  (with-slots (name tk-name id string-id path parent tk-init tk-define) w
+    (when tk-define
+      (setf string-id (format nil "~a~a" (or tk-name "stk") id))
+      (if (and parent (string/= (window-path parent) "."))
+          (setf path (format nil "~a.~a" (window-path parent) string-id))
+          (setf path (format nil ".~a" string-id)))
+      (send-command "~a ~a ~a" name path (or tk-init "")))))
 
 (defun bind-command (w fun)
    "Registers the command handler FUN for the window W.
@@ -117,7 +125,7 @@ Called from constructur functions."
        (let ((o (car option))
              (v (cadr option)))
          (case o
-           ((:parent :orient :tk-name)) ;; handled elsewhere
+           ((:parent :orient :tk-name :tk-define)) ;; handled elsewhere
            (:command
             (bind-command w v))
            (:selected

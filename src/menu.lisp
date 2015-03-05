@@ -24,11 +24,6 @@
 
 (define-tk-window (menu "menu" "mn" window))
 
-(defun menu-toplevel (m)
-  "Adds the menu M to the toplevel window."
-  (send-command ". conf -menu ~a"
-                (window-path m)))
-
 (defun menu-popup (m x y)
   "Shows the menu M at X,Y."
   (send-command "tk_popup ~a ~a ~a"

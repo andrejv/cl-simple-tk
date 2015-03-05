@@ -48,4 +48,5 @@
                (:file "text")
                (:file "scrollbar")
                (:file "dialogs")
-               (:file "image")))))
+               (:file "image")
+               (:file "with-tk")))))

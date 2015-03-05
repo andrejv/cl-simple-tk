@@ -182,7 +182,6 @@ call @code{cnv addtag ntag withtag otag}.")
            :menu-add-radio
            :menu-add-separator
            :menu-popup
-           :menu-toplevel
            :menubutton
            :message
            :message-box
@@ -324,5 +323,5 @@ call @code{cnv addtag ntag withtag otag}.")
            :window-state
            :window-width
            :window-withdraw
-           :with-tk))
+           :with-tk-root))
 

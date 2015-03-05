@@ -33,11 +33,12 @@ It shouldn't be used directly. Use the " (string win) " function instead.")))
 
 The undelying tcl/tk class is " (string name) ".")
        (let ((w (make-instance ',win
-                               :name ,name
-                               :tk-name (getf options :tk-name ,tk-name)
-                               :id (if (getf options :tk-name) "" (next-id))
-                               :tk-init ,tk-init
-                               :parent (getf options :parent))))
+                               :name      ,name
+                               :tk-name   (getf options :tk-name ,tk-name)
+                               :tk-define (getf options :tk-define t)
+                               :tk-init   ,tk-init
+                               :id        (if (getf options :tk-name) "" (next-id))
+                               :parent    (getf options :parent))))
          (configure-window w options)
          ,@body
          w))))

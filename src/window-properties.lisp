@@ -46,7 +46,7 @@ Can be used with the setf macro to select a window."
 
 (defun window-resizable (w)
   "Checks if the window W is resizable."
-  (let* ((r (get-response "wm resizable ~a" (if w (window-path w) ".")))
+  (let* ((r (get-response "wm resizable ~a" (window-path w)))
          (r-split (split-sequence #\Space r)))
     (list (string= "1" (car r-split))
           (string= "1" (cadr r-split)))))
@@ -57,7 +57,7 @@ Can be used with the setf macro to select a window."
 R should be a list with two boolean values, first for vertical and
 second for horihontal property."
   (send-command "wm resizable ~a ~s ~s"
-                (if w (window-path w) ".")
+                (window-path w)
                 (if (car r) "1" "0")
                 (if (cadr r) "1" "0")))
 
@@ -67,7 +67,7 @@ second for horihontal property."
 
 (defun window-geometry (w)
   "Checks if the window W is resizable."
-  (let* ((r (get-response "wm geometry ~a" (if w (window-path w) ".")))
+  (let* ((r (get-response "wm geometry ~a" (window-path w)))
          (r-split (split-sequence #\+ r))
          (wh (split-sequence #\x (car r-split))))
     (list (parse-integer (car wh))
@@ -85,50 +85,52 @@ G lis a list of ((w h) x y)."
         (pos (if (cdr g)
                  (format nil "+~a+~a" (cadr g) (caddr g))
                  "")))
-    (send-command "wm geometry ~a ~a~a" (if w (window-path w) ".") size pos)))
+    (send-command "wm geometry ~a ~a~a" (window-path w) size pos)))
 
 (defun window-screenwidth (w)
   "Returns the width of the screen on which W is displayed."
-  (parse-integer (get-response "winfo screenwidth ~a" (if w (window-path w) "."))))
+  (parse-integer (get-response "winfo screenwidth ~a" (window-path w))))
 
 (defun window-screenheight (w)
   "Returns the height of the screen on which W is displayed."
-  (parse-integer (get-response "winfo screenheight ~a" (if w (window-path w) "."))))
+  (parse-integer (get-response "winfo screenheight ~a" (window-path w))))
 
 (defun window-width (w)
   "Returns the width of the window W."
-  (parse-integer (get-response "winfo width ~a" (if w (window-path w) "."))))
+  (parse-integer (get-response "winfo width ~a" (window-path w))))
 
 (defun window-height (w)
   "Returns the height of the window W."
-  (parse-integer (get-response "winfo width ~a" (if w (window-path w) "."))))
+  (parse-integer (get-response "winfo width ~a" (window-path w))))
 
 (defun window-reqwidth (w)
   "Returns the requested width of the window W."
-  (parse-integer (get-response "winfo reqwidth ~a" (if w (window-path w) "."))))
+  (parse-integer (get-response "winfo reqwidth ~a" (window-path w))))
 
 (defun window-reqheight (w)
   "Returns the requested height of the window W."
-  (parse-integer (get-response "winfo reqwidth ~a" (if w (window-path w) "."))))
+  (parse-integer (get-response "winfo reqwidth ~a" (window-path w))))
 
 (defun window-minsize (w)
   "Returns the minsize of the window."
   (mapcar #'parse-integer
-          (get-response "wm minsize ~a" (if w (window-path w) "."))))
+          (get-response "wm minsize ~a" (window-path w))))
 
 (defun (setf window-minsize) (l w)
   "Sets the minsize of the window."
-  (send-command "wm minsize ~a ~a ~a" (if w (window-path w) ".") (car l) (cadr l)))
+  (send-command "wm minsize ~a ~a ~a" (window-path w) (car l) (cadr l)))
 
 (defun window-withdraw (w)
   "Withdraws the window W."
-  (send-command "wm withdraw ~a" (if w (window-path w) ".")))
+  (send-command "wm withdraw ~a" (window-path w)))
 
 (defun window-destroy (w)
   "Withdraws the window W.
 
 W can be nil for the root window \".\""
-  (send-command "destroy ~a" (if w (window-path w) ".")))
+  (if (null w)
+      (send-command "destroy .")
+      (send-command "destroy ~a" (window-path w))))
 
 (defun get-tk-themes ()
   "Returns a list of Tk themes."
