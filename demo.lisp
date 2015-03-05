@@ -16,20 +16,20 @@
          (s-var (tk:float-variable))
          (l (tk:label :text "Value" :parent f :textvariable "lvar"))
          (s (tk:scale :parent f
-                       :variable s-var
-                       :command (lambda (args)
-                                  (declare (ignore args))
+                      :variable s-var
+                      :command (lambda (args)
+                                 (declare (ignore args))
+                                 (setf (tk:var-value "lvar")
+                                       (tk:var-value s-var)))))
+         (b (tk:button :text "Value" :parent f
+                       :command (lambda ()
                                   (setf (tk:var-value "lvar")
                                         (tk:var-value s-var)))))
-         (b (tk:button :text "Value" :parent f
-                        :command (lambda ()
-                                   (setf (tk:var-value "lvar")
-                                         (tk:var-value s-var)))))
          (cb (tk:combobox :parent f
-                            :text "andrej" :values (list "andrej" "vodopivec")))
+                          :text "andrej" :values (list "andrej" "vodopivec")))
          (sp-var (tk:integer-variable))
          (sp (tk:spinbox :parent f :textvariable sp-var 
-                          :from "0" :to "10" :increment "2")))
+                         :from "0" :to "10" :increment "2")))
     (setf (tk:var-value s-var) 0.0)
     (setf (tk:var-value "lval") "Nothing yet!")
     (setf (tk:var-value sp-var) 0)
@@ -43,17 +43,17 @@
          (btn-v (tk:string-variable))
          (pr (tk:progressbar :parent f :variable pr-v))
          (start (tk:button :parent f
-                            :textvariable btn-v
-                            :command (lambda ()
-                                       (if running
-                                           (progn
-                                             (setf running nil)
-                                             (setf (tk:var-value btn-v) "Start")
-                                             (tk:progressbar-stop pr))
-                                           (progn
-                                             (setf running t)
-                                             (setf (tk:var-value btn-v) "Stop")
-                                             (tk:progressbar-start pr))))))
+                           :textvariable btn-v
+                           :command (lambda ()
+                                      (if running
+                                          (progn
+                                            (setf running nil)
+                                            (setf (tk:var-value btn-v) "Start")
+                                            (tk:progressbar-stop pr))
+                                          (progn
+                                            (setf running t)
+                                            (setf (tk:var-value btn-v) "Stop")
+                                            (tk:progressbar-start pr))))))
          (m (tk:label :parent f :textvariable pr-v)))
     (setf (tk:var-value btn-v) "Start")
     (setf (tk:var-value pr-v) 50.0)
@@ -71,53 +71,53 @@
          (cb (tk:button :text "Blue" :parent cnv))
          (mouse-down nil))
     (tk:bind-event cnv "<Double-Button-1>"
-                    (lambda (evt)
-                      (destructuring-bind (x y)
-                          (tk:canvas-scrolled-coords cnv (tk:event-mouse-position evt))
-                        (tk:canvas-create-oval cnv (list (- x 5) (- y 5)
-                                                          (+ x 5) (+ y 5))
-                                                :outline "blue" :width "2" :tags "Point"))))
+                   (lambda (evt)
+                     (destructuring-bind (x y)
+                         (tk:canvas-scrolled-coords cnv (tk:event-mouse-position evt))
+                       (tk:canvas-create-oval cnv (list (- x 5) (- y 5)
+                                                        (+ x 5) (+ y 5))
+                                              :outline "blue" :width "2" :tags "Point"))))
     (tk:bind-event cnv "<Button-1>"
-                    (lambda (evt)
-                      (destructuring-bind (x y)
-                          (tk:canvas-scrolled-coords cnv (tk:event-mouse-position evt))
-                        (tk:canvas-itemconfig cnv "sel-tag" :outline "green")
-                        (tk:canvas-scan-mark cnv x y)
-                        (tk:canvas-dtag cnv "sel-tag")
-                        (setf mouse-down t)
-                        (tk:canvas-addtag-closest cnv "sel-tag" x y)
-                  (tk:canvas-itemconfig cnv "sel-tag" :outline "yellow"))))
+                   (lambda (evt)
+                     (destructuring-bind (x y)
+                         (tk:canvas-scrolled-coords cnv (tk:event-mouse-position evt))
+                       (tk:canvas-itemconfig cnv "sel-tag" :outline "green")
+                       (tk:canvas-scan-mark cnv x y)
+                       (tk:canvas-dtag cnv "sel-tag")
+                       (setf mouse-down t)
+                       (tk:canvas-addtag-closest cnv "sel-tag" x y)
+                       (tk:canvas-itemconfig cnv "sel-tag" :outline "yellow"))))
     (tk:bind-event cnv "<Motion>"
-                    (lambda (evt)
-                      (destructuring-bind (x y)
-                          (tk:canvas-scrolled-coords cnv (tk:event-mouse-position evt))
-                        (when mouse-down
-                          (tk:canvas-scan-dragto cnv x y :gain 1)))))
+                   (lambda (evt)
+                     (destructuring-bind (x y)
+                         (tk:canvas-scrolled-coords cnv (tk:event-mouse-position evt))
+                       (when mouse-down
+                         (tk:canvas-scan-dragto cnv x y :gain 1)))))
     (tk:bind-event cnv "<ButtonRelease-1>"
-                    (lambda (evt)
-                      (declare (ignore evt))
-                      (setf mouse-down nil)))
+                   (lambda (evt)
+                     (declare (ignore evt))
+                     (setf mouse-down nil)))
     (tk:bind-event cnv "<2>"
-                    (lambda (evt)
+                   (lambda (evt)
                       (destructuring-bind (x y)
                           (tk:canvas-scrolled-coords cnv (tk:event-mouse-position evt))
                         (tk:canvas-create-oval cnv (list (- x 5) (- y 5)
-                                                          (+ x 5) (+ y 5))
-                                                :outline "red" :width "2"))))
+                                                         (+ x 5) (+ y 5))
+                                               :outline "red" :width "2"))))
     (tk:canvas-bind cnv "arc" "<Enter>"
-                     (lambda (evt)
-                       (print evt)
-                       (tk:canvas-itemconfig cnv "arc"
-                                              :outline "red")))
+                    (lambda (evt)
+                      (print evt)
+                      (tk:canvas-itemconfig cnv "arc"
+                                            :outline "red")))
     (tk:canvas-create-arc cnv (list 100 100 200 200) :start "45" :tags '("arc"))
     (tk:canvas-create-window cnv (list 30 30) :window cb)
     (tk:bind-command cb (lambda ()
-                           (tk:canvas-addtag-withtag cnv "all-blue" "Point")
-                           (tk:canvas-itemconfig cnv "all-blue" :outline "blue")))
+                          (tk:canvas-addtag-withtag cnv "all-blue" "Point")
+                          (tk:canvas-itemconfig cnv "all-blue" :outline "blue")))
     (tk:bind-command b (lambda ()
-                          (print (tk:canvas-find-all cnv))
-                          (tk:canvas-addtag-withtag cnv "all-items" "Point")
-                          (tk:canvas-delete cnv "all-items")))
+                         (print (tk:canvas-find-all cnv))
+                         (tk:canvas-addtag-withtag cnv "all-items" "Point")
+                         (tk:canvas-delete cnv "all-items")))
     (tk:pack fc :expand "1" :fill "both")
     (tk:pack b)
     (tk:grid (list cnv vs) :sticky "nwes")
@@ -142,14 +142,14 @@
     (tk:text-tag-add txt "an" "1.1" "1.3")
     (tk:text-tag-config txt "an" :background "yellow")
     (tk:text-tag-bind txt "an" "<Enter>"
-                       (lambda (ev)
-                         (declare (ignore ev))
-                         (print "Tag enter")
-                         (tk:text-tag-config txt "an" :underline t)))
+                      (lambda (ev)
+                        (declare (ignore ev))
+                        (print "Tag enter")
+                        (tk:text-tag-config txt "an" :underline t)))
     (tk:text-tag-bind txt "an" "<Leave>"
-                       (lambda (ev)
-                         (declare (ignore ev))
-                         (print "Tag leave")
+                      (lambda (ev)
+                        (declare (ignore ev))
+                        (print "Tag leave")
                          (tk:text-tag-config txt "an" :underline nil)))
     (tk:after-idle (lambda () (print (tk:text-bbox txt "0.2"))))
     f))
@@ -162,8 +162,8 @@
          (m (tk:message :parent f :textvariable t-var :width 400)))
     (tk:pack (list e l m) :pady 2 :padx 5)
     (tk:bind-event e "<KeyPress>"
-                    (lambda (evt)
-                      (setf (tk:var-value "tva1") (tk:event-key-code evt))))
+                   (lambda (evt)
+                     (setf (tk:var-value "tva1") (tk:event-key-code evt))))
     f))
 
 (defun theme-frame (nb)
@@ -188,9 +188,9 @@
       (tk:treeview-insert tw id 0 :text "Line 2" :values (list "11" "22"))
       (tk:treeview-selection-set tw id))
     (tk:bind-event tw "<<TreeviewSelect>>"
-                    (lambda (ev)
-                      (declare (ignore ev))
-                      (print (tk:treeview-selection tw))))
+                   (lambda (ev)
+                     (declare (ignore ev))
+                     (print (tk:treeview-selection tw))))
     tw))
 
 (defun listbox-frame (nb)
@@ -199,9 +199,9 @@
     (tk:pack l :fill "x" :expand t :anchor "n" :padx 10 :pady 10)
     (tk:listbox-insert l 0 "One" "Two" "Three" "Four")
     (tk:bind-event l "<<ListboxSelect>>"
-                    (lambda (ev)
-                      (declare (ignore ev))
-                      (print (tk:listbox-curselection l))))
+                   (lambda (ev)
+                     (declare (ignore ev))
+                     (print (tk:listbox-curselection l))))
     f))
 
 (defun paned-frame (nb)

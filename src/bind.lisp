@@ -54,7 +54,7 @@ EVT is the argument for the FUN argument to the BIND function."
 (defun after (ms fun)
   "Calls FUN after MS miliseconds.
 
-FUN should be afunction with no arguments. Returns the ID of the
+FUN should be a function with no arguments. Returns the ID of the
 callback."
   (let ((id (format nil "after~a" (next-id))))
     (setf (gethash id *event-table*)
