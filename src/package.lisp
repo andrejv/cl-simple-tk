@@ -311,12 +311,18 @@ call @code{cnv addtag ntag withtag otag}.")
            :window-configure
            :window-destroy
            :window-geometry
+           :window-height
            :window-identify
            :window-identify-element
            :window-minsize
            :window-resizable
+           :window-reqheight
+           :window-reqwidth
+           :window-screenheight
+           :window-screenwidth
            :window-selected
            :window-state
+           :window-width
            :window-withdraw
            :with-tk))
 

@@ -79,9 +79,37 @@ second for horihontal property."
   "Sets the geometry of the window W.
 
 G lis a list of ((w h) x y)."
-  (send-command "wm geometry ~a ~ax~a+~a+~a"
-                (window-path w)
-                (car g) (cadr g) (caddr g) (cadddr g)))
+  (let ((size (if (car g)
+                  (format nil "~ax~a" (caar g) (cadar g))
+                  ""))
+        (pos (if (cdr g)
+                 (format nil "+~a+~a" (cadr g) (caddr g))
+                 "")))
+    (send-command "wm geometry ~a ~a~a" (if w (window-path w) ".") size pos)))
+
+(defun window-screenwidth (w)
+  "Returns the width of the screen on which W is displayed."
+  (parse-integer (get-response "winfo screenwidth ~a" (if w (window-path w) "."))))
+
+(defun window-screenheight (w)
+  "Returns the height of the screen on which W is displayed."
+  (parse-integer (get-response "winfo screenheight ~a" (if w (window-path w) "."))))
+
+(defun window-width (w)
+  "Returns the width of the window W."
+  (parse-integer (get-response "winfo width ~a" (if w (window-path w) "."))))
+
+(defun window-height (w)
+  "Returns the height of the window W."
+  (parse-integer (get-response "winfo width ~a" (if w (window-path w) "."))))
+
+(defun window-reqwidth (w)
+  "Returns the requested width of the window W."
+  (parse-integer (get-response "winfo reqwidth ~a" (if w (window-path w) "."))))
+
+(defun window-reqheight (w)
+  "Returns the requested height of the window W."
+  (parse-integer (get-response "winfo reqwidth ~a" (if w (window-path w) "."))))
 
 (defun window-minsize (w)
   "Returns the minsize of the window."
