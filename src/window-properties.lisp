@@ -112,6 +112,15 @@ G lis a list of ((w h) x y)."
   "Sets the minsize of the window."
   (send-command "wm minsize ~a ~a ~a" (window-path w) (car l) (cadr l)))
 
+(defun window-maxsize (w)
+  "Returns the maxsize of the window."
+  (mapcar #'parse-integer
+          (get-response "wm maxsize ~a" (window-path w))))
+
+(defun (setf window-maxsize) (l w)
+  "Sets the maxsize of the window."
+  (send-command "wm maxsize ~a ~a ~a" (window-path w) (car l) (cadr l)))
+
 (defun window-withdraw (w)
   "Withdraws the window W."
   (send-command "wm withdraw ~a" (window-path w)))
@@ -124,6 +133,35 @@ W can be nil for the root window \".\""
       (send-command "destroy .")
       (send-command "destroy ~a" (window-path w))))
 
+(defun window-iconify (w)
+  "Iconifies the window W."
+  (send-command "wm iconify ~a" (window-path w)))
+
+(defun window-deiconify (w)
+  "Deiconifies the window w."
+  (send-command "wm deiconify ~a" (window-path w)))
+
+(defun window-title (w)
+  "Returns the title of the window W."
+  (get-response "wm title ~a" (window-path w)))
+
+(defun (setf window-title) (title w)
+  "Sets the title of the window W."
+  (send-command "wm title ~a ~s" (window-path w) title))
+
+(defun window-pointerx (w)
+  "Returns the X coordinate of the mouse if it is on the same screen as W."
+  (parse-integer (get-response "winfo pointerx ~a" (window-path w))))
+
+(defun window-pointerxy (w)
+  "Returns the coordinates of the mouse if it is on the same screen as W."
+  (mapcar #'parse-integer
+          (split-sequence #\Space (get-response "winfo pointerxy ~a" (window-path w)))))
+
+(defun window-pointery (w)
+  "Returns the X coordinate of the mouse if it is on the same screen as W."
+  (parse-integer (get-response "winfo pointery ~a" (window-path w))))
+
 (defun get-tk-themes ()
   "Returns a list of Tk themes."
   (let ((themes (get-response "ttk::style theme names")))
@@ -132,4 +170,3 @@ W can be nil for the root window \".\""
 (defun set-tk-theme (theme)
   "Sets the Tk Theme."
   (send-command "ttk::style theme use ~a" theme))
-

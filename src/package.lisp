@@ -308,18 +308,25 @@ call @code{cnv addtag ntag withtag otag}.")
            :var-value
            :window-cget
            :window-configure
+           :window-deiconify
            :window-destroy
            :window-geometry
            :window-height
+           :window-iconify
            :window-identify
            :window-identify-element
+           :window-maxsize
            :window-minsize
+           :window-pointerx
+           :window-pointerxy
+           :window-pointery
            :window-resizable
            :window-reqheight
            :window-reqwidth
            :window-screenheight
            :window-screenwidth
            :window-state
+           :window-title
            :window-width
            :window-withdraw
            :with-tk-root))
