@@ -133,6 +133,15 @@ W can be nil for the root window \".\""
       (send-command "destroy .")
       (send-command "destroy ~a" (window-path w))))
 
+(defun window-iconphoto (w photo &key (default nil))
+  "Sets the icon for the window W to the named image PHOTO.
+
+If :default is t, sets the icon for subwindows."
+  (send-command "wm iconphoto ~a ~a ~a"
+                (window-path w)
+                (if default "-default" "")
+                photo))
+
 (defun window-iconify (w)
   "Iconifies the window W."
   (send-command "wm iconify ~a" (window-path w)))

@@ -313,6 +313,7 @@ call @code{cnv addtag ntag withtag otag}.")
            :window-geometry
            :window-height
            :window-iconify
+           :window-iconphoto
            :window-identify
            :window-identify-element
            :window-maxsize
