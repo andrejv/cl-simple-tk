@@ -28,6 +28,9 @@
 (defvar *root-window* nil
   "The root window.")
 
+(defvar *window-table* nil
+  "The hashtable from window paths to windows.")
+
 (defun next-id ()
   "Computes id numbers for unique window names."
   (incf *window-counter*))
@@ -91,7 +94,12 @@
       (if (and parent (string/= (window-path parent) "."))
           (setf path (format nil "~a.~a" (window-path parent) string-id))
           (setf path (format nil ".~a" string-id)))
-      (send-command "~a ~a ~a" name path (or tk-init "")))))
+      (send-command "~a ~a ~a" name path (or tk-init ""))
+      (setf (gethash path *window-table*) w))))
+
+(defun window-from-path (path)
+  "Returns the window with path PATH."
+  (gethash path *window-table*))
 
 (defun bind-command (w fun)
    "Registers the command handler FUN for the window W.

@@ -39,7 +39,7 @@ call @code{cnv addtag ntag withtag otag}.")
            :after-idle
            :bind-command
            :bind-event
-           :boolean-variable
+           :boolean-var
            :button
            :button-invoke
            :canvas
@@ -137,14 +137,21 @@ call @code{cnv addtag ntag withtag otag}.")
            :event-key-code
            :event-mouse-position
            :event-window-path
-           :float-variable
+           :float-var
            :frame
+           :font-configure
+           :font-create
+           :font-delete
            :get-open-file
            :get-save-file
            :get-tk-themes
            :grid
-           :grid-col-configure
-           :grid-row-configure
+           :grid-configure
+           :grid-columnconfigure
+           :grid-forget
+           :grid-info
+           :grid-rowconfigure
+           :grid-slaves
            :image-blank
            :image-cget
            :image-configure
@@ -157,7 +164,7 @@ call @code{cnv addtag ntag withtag otag}.")
            :image-redither
            :image-transparency
            :image-write
-           :integer-variable
+           :integer-var
            :label
            :label-frame
            :listbox
@@ -197,6 +204,10 @@ call @code{cnv addtag ntag withtag otag}.")
            :notebook-tab
            :notebook-tabs
            :pack
+           :pack-configure
+           :pack-forget
+           :pack-infopla
+           :pack-slaves
            :panedwindow
            :panedwindow-add
            :panedwindow-forget
@@ -205,6 +216,10 @@ call @code{cnv addtag ntag withtag otag}.")
            :panedwindow-insert
            :panedwindow-sashpos
            :place
+           :place-configure
+           :place-forget
+           :place-info
+           :place-slaves
            :progressbar
            :progressbar-start
            :progressbar-step
@@ -216,7 +231,7 @@ call @code{cnv addtag ntag withtag otag}.")
            :separator
            :set-tk-theme
            :spinbox
-           :string-variable
+           :string-var
            :text
            :text-bbox
            :text-count-chars
@@ -306,21 +321,26 @@ call @code{cnv addtag ntag withtag otag}.")
            :treeview-selection-toggle
            :treeview-set
            :var-value
+           :window-children
            :window-cget
            :window-configure
            :window-deiconify
            :window-destroy
+           :window-focus
+           :window-from-path
            :window-geometry
            :window-height
            :window-iconify
            :window-iconphoto
            :window-identify
            :window-identify-element
+           :window-lower
            :window-maxsize
            :window-minsize
            :window-pointerx
            :window-pointerxy
            :window-pointery
+           :window-raise
            :window-resizable
            :window-reqheight
            :window-reqwidth

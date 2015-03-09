@@ -13,7 +13,7 @@
 
 (defun scale-frame (nb)
   (let* ((f (tk:frame :parent nb))
-         (s-var (tk:float-variable))
+         (s-var (tk:float-var))
          (l (tk:label :text "Value" :parent f :textvariable "lvar"))
          (s (tk:scale :parent f
                       :variable s-var
@@ -27,7 +27,7 @@
                                         (tk:var-value s-var)))))
          (cb (tk:combobox :parent f
                           :text "andrej" :values (list "andrej" "vodopivec")))
-         (sp-var (tk:integer-variable))
+         (sp-var (tk:integer-var))
          (sp (tk:spinbox :parent f :textvariable sp-var 
                          :from "0" :to "10" :increment "2")))
     (setf (tk:var-value s-var) 0.0)
@@ -39,8 +39,8 @@
 (defun progress-frame (nb)
   (let* ((f (tk:frame :parent nb))
          (running nil)
-         (pr-v (tk:float-variable))
-         (btn-v (tk:string-variable))
+         (pr-v (tk:float-var))
+         (btn-v (tk:string-var))
          (pr (tk:progressbar :parent f :variable pr-v))
          (start (tk:button :parent f
                            :textvariable btn-v
@@ -122,8 +122,8 @@
     (tk:pack b)
     (tk:grid (list cnv vs) :sticky "nwes")
     (tk:grid hs :row 1 :column 0 :sticky "nwes")
-    (tk:grid-col-configure fc 0 :weight 1)
-    (tk:grid-row-configure fc 0 :weight 1)
+    (tk:grid-columnconfigure fc 0 :weight 1)
+    (tk:grid-rowconfigure fc 0 :weight 1)
     (tk:scrollbar-connect cnv hs)
     (tk:scrollbar-connect cnv vs)
     f))
@@ -133,8 +133,8 @@
          (txt (tk:text :parent f :width "50" :height "10"))
          (vs (tk:scrollbar :parent f :orient "vertical")))
     (tk:grid (list txt vs) :sticky "nsew")
-    (tk:grid-col-configure f 0 "weight" "1")
-    (tk:grid-row-configure f 0 "weight" "1")
+    (tk:grid-columnconfigure f 0 :weight "1")
+    (tk:grid-rowconfigure f 0 :weight "1")
     (tk:scrollbar-connect txt vs)
     (tk:text-insert txt "insert" "Andrej")
     (print (tk:text-search txt "nd" "0.1"))
@@ -155,7 +155,7 @@
     f))
 
 (defun entry-frame (nb)
-  (let* ((t-var (tk:string-variable))
+  (let* ((t-var (tk:string-var))
          (f (tk:frame :parent nb))
          (e (tk:entry :parent f :textvariable t-var :show "*"))
          (l (tk:label :parent f :textvariable "tva1"))

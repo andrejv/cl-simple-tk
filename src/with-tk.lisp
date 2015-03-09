@@ -29,9 +29,11 @@
 All code should be called from within WITH-TK-ROOT."
   `(sb-int:with-float-traps-masked (:underflow :overflow :inexact :invalid :divide-by-zero)
      (let* ((*event-table* (make-hash-table :test #'equal))
+            (*window-table* (make-hash-table :test #'equal))
             (*current-interp* (init-session))
             (,root (toplevel :tk-name "." :tk-define nil))
             (*root-window* ,root))
+       (setf (gethash "." *window-table*) ,root)
        (send-command (format nil "wm title . ~s" ,title))
        ,@body
        (send-command "catch { console hide }")
@@ -45,8 +47,10 @@ All code should be called from within WITH-TK-ROOT."
 All code should be called from within WITH-TK-ROOT."
   `(ext:with-float-traps-masked (:underflow :overflow :inexact :invalid :divide-by-zero)
      (let* ((*event-table* (make-hash-table :test #'equal))
+            (*window-table* (make-hash-table :test #'equal))
             (*current-interp* (init-session))
             (,root (toplevel :tk-name "." :tk-define nil)))
+       (setf (gethash "." *window-table*) ,root)
        (send-command (format nil "wm title . ~s" ,title))
        ,@body
        (send-command "catch { console hide }")
@@ -60,8 +64,10 @@ All code should be called from within WITH-TK-ROOT."
 All code should be called from within WITH-TK-ROOT."
   `(flet ((thunk ()
             (let* ((*event-table* (make-hash-table :test #'equal))
+                   (*window-table* (make-hash-table :test #'equal))
                    (*current-interp* (init-session))
                    (,root (toplevel :tk-name "." :tk-define nil)))
+              (setf (gethash "." *window-table*) ,root)
               (send-command (format nil "wm title . ~s" ,title))
               ,@body
               (send-command "catch { console hide }")
@@ -77,9 +83,11 @@ All code should be called from within WITH-TK-ROOT."
 
 All code should be called from within WITH-TK-ROOT."
   `(let* ((*event-table* (make-hash-table :test #'equal))
+          (*window-table* (make-hash-table :test #'equal))
           (*current-interp* (init-session))
           (,root (toplevel :tk-name "." :tk-define nil))
           (*root-window* ,root))
+     (setf (gethash "." *window-table*) ,root)
      (send-command (format nil "wm title . ~s" ,title))
      ,@body
      (tk-main-loop)

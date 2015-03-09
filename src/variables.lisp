@@ -46,28 +46,28 @@
 TYPE can be :STRING (default), :INTEGER or :FLOAT."
   (make-instance 'tcl-var :type type))
 
-(defun integer-variable ()
+(defun integer-var ()
   "Defines an integer tcl variable.
 
 The value of the variable is obtaines with VAR-VALUE function and can
 be modified with SETF."
   (tcl-variable :type :integer))
 
-(defun string-variable ()
+(defun string-var ()
   "Defines a string tcl variable.
 
 The value of the variable is obtaines with VAR-VALUE function and can
 be modified with SETF."
   (tcl-variable :type :string))
 
-(defun float-variable ()
+(defun float-var ()
   "Defines a float tcl variable.
 
 The value of the variable is obtaines with VAR-VALUE function and can
 be modified with SETF."
   (tcl-variable :type :float))
 
-(defun boolean-variable ()
+(defun boolean-var ()
   "Defines a string tcl variable.
 
 The value of the variable is obtaines with VAR-VALUE function and can

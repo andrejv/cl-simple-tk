@@ -26,7 +26,7 @@
                             (detail "") (parent) (type "ok"))
   "Opens a dialog box.
 
-Options supported are TITLE, ICON, DEFAULT, DETAUL, PARENT and
+Options supported are TITLE, ICON, DEFAULT, DETAIL, PARENT and
 TYPE. Returns the button clicked as a string."
   (get-response "tk_messageBox -message ~s -title ~s -icon ~s -default ~s -type ~s -detail ~s -parent ~s" 
                 message title icon default type detail (if parent (window-path parent) ".")))
@@ -38,23 +38,30 @@ Returns the color as a string."
   (get-response "tk_chooseColor -title ~s -initialcolor ~s -parent ~s"
                 title initial (if parent (window-path parent) ".")))
 
-(defun choose-directory (&key (title "Choose directory") (parent) (initial ""))
+(defun choose-directory (&key (title "Choose directory") parent (initialdir "") mustexist)
   "Opens a dialog for choosing a directory.
 
 Returns the result as a string."
-  (get-response "tk_chooseDirectory -title ~s -initialdir ~s -parent ~s"
-                title initial (if parent (window-path parent) ".")))
+  (get-response "tk_chooseDirectory -title ~s -initialdir ~s -parent ~s -mustexist ~a"
+                title initialdir (if parent (window-path parent) ".")
+                (if mustexist "1" "0")))
 
-(defun get-open-file (&key (title "Choose file") (parent) (initial ""))
+(defun get-open-file (&key (title "Choose file") parent
+                        (initialdir "") (initialfile) filetypes)
   "Opens a \"file open\" dialog.
 
 Returns the result as a string."
-  (get-response "tk_getOpenFile -title ~s -initialdir ~s -parent ~s"
-                title initial (if parent (window-path parent) ".")))
+  (get-response "tk_getOpenFile -title ~s -initialdir ~s -initialfile ~s -parent ~s"
+                title initialdir initialfile (if parent (window-path parent) ".")
+                (if filetypes (format nil "-filetypes ~a" filetypes) "")))
 
-(defun get-save-file (&key (title "Choose file") (parent) (initial ""))
+(defun get-save-file (&key (title "Choose file") parent
+                        (initialdir "") (initialfile "") filetypes
+                        (confirmoverwrite t))
   "Opens a \"file save\" dialog.
 
 Returns the result as a string."
-  (get-response "tk_getSaveFile -title ~s -initialdir ~s -parent ~s"
-                title initial (if parent (window-path parent) ".")))
+  (get-response "tk_getSaveFile -title ~s -initialdir ~s -initialfile ~s -parent ~s ~a -confirmoverwrite ~a"
+                title initialdir initialfile (if parent (window-path parent) ".")
+                (if filetypes (format nil "-filetypes ~a" filetypes) "")
+                (if confirmoverwrite "1" "0")))

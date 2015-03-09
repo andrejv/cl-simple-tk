@@ -71,13 +71,23 @@ second for horihontal property."
   "Sets the geometry of the window W.
 
 G lis a list of ((w h) x y)."
-  (let ((size (if (car g)
-                  (format nil "~ax~a" (caar g) (cadar g))
-                  ""))
-        (pos (if (cdr g)
-                 (format nil "+~a+~a" (cadr g) (caddr g))
-                 "")))
-    (send-command "wm geometry ~a ~a~a" (window-path w) size pos)))
+  (if (stringp g)
+      (send-command "wm geometry ~a ~a" (window-path w) g)
+      (let ((size (if (car g)
+                      (format nil "~ax~a" (caar g) (cadar g))
+                      ""))
+            (pos (if (cdr g)
+                     (format nil "+~a+~a" (cadr g) (caddr g))
+                     "")))
+        (send-command "wm geometry ~a ~a~a" (window-path w) size pos))))
+
+(defun window-children (w)
+  "Returns the list of children of the window W."
+  (let ((r (get-response "winfo children ~a" (window-path w))))
+    (if (string= r "")
+        ()
+        (mapcar #'window-from-path
+                (split-sequence #\Space r)))))
 
 (defun window-screenwidth (w)
   "Returns the width of the screen on which W is displayed."
@@ -171,6 +181,20 @@ If :default is t, sets the icon for subwindows."
   "Returns the X coordinate of the mouse if it is on the same screen as W."
   (parse-integer (get-response "winfo pointery ~a" (window-path w))))
 
+(defun window-raise (w &optional above)
+  "Raises the window W (above ABOVE)."
+  (send-command "raise ~a ~a" (window-path w) (if above (window-path above) "")))
+
+(defun window-lower (w &optional below)
+  "Lowers the window W (below BELOW)."
+  (send-command "lower ~a ~a" (window-path w) (if below (window-path below) "")))
+
+(defun window-focus (&optional w)
+  "Sets the input focus to W."
+  (if w
+      (send-command "focus ~a" (window-path w))
+      (get-response "focus")))
+
 (defun get-tk-themes ()
   "Returns a list of Tk themes."
   (let ((themes (get-response "ttk::style theme names")))
@@ -179,3 +203,24 @@ If :default is t, sets the icon for subwindows."
 (defun set-tk-theme (theme)
   "Sets the Tk Theme."
   (send-command "ttk::style theme use ~a" theme))
+
+(defun font-create (&key name family size weight slant underline overstrike)
+  "Creates the a new font. Returns the name of the font."
+  (get-response "font create ~a ~a ~a ~a ~a ~a ~a"
+                (if name       (format nil "~s" name)               "")
+                (if family     (format nil "-family ~s"     family) "")
+                (if size       (format nil "-size ~s"       size)   "")
+                (if weight     (format nil "-weight ~s"     weight) "")
+                (if slant      (format nil "-slant ~s"      slant)  "")
+                (if underline  (format nil "-underline ~s"  family) "")
+                (if overstrike (format nil "-overstrike ~s" family) "")))
+
+(defun font-delete (&rest fonts)
+  "Deletes the FONTS."
+  (send-command "font delete ~{~s~^ ~}" fonts))
+
+(defun font-configure (font &rest options)
+  "Configures the named FONT."
+  (loop for opt on options by #'cddr do
+       (send-command "font configure ~s -~a ~s"
+                     font (key-to-string (car opt)) (option-to-string (cadr opt)))))
