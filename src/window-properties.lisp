@@ -22,6 +22,76 @@
 
 (in-package :simple-tk)
 
+(defun make-string-or-key (str)
+  "Converts a list of chars to a string or a keyword.
+
+For a list (- a b c) we get a keyword :abc."
+  (if (and (cadr str)
+           (eql (car str) #\-)
+           (alpha-char-p (cadr str)))
+      (intern (string-upcase (coerce (cdr str) 'string)) "KEYWORD")
+      (coerce str 'string)))
+
+(defun parse-part (s)
+  (unless (peek-char t s nil nil)
+    (return-from parse-part ()))
+  (loop
+     for c = (read-char s nil 'eof)
+     when (or (eql c #\})
+              (eql c #\{)) do
+       (progn
+         (unread-char c s)
+         (return (make-string-or-key str)))
+     when (or (eql c 'eof)
+              (eql c #\Space))do
+       (return (make-string-or-key str))
+     collect c into str))
+
+(defun parse-tcl (s)
+  (unless (peek-char t s nil nil)
+    (return-from parse-tcl ()))
+  (let ((c (read-char s nil #\})))
+    (cond
+      ((eql c #\})
+       ())
+      ((eql c #\{)
+       (let ((sub (parse-tcl s)))
+         (cons sub (parse-tcl s))))
+      (t
+       (unread-char c s)
+       (let ((part (parse-part s)))
+         (cons part (parse-tcl s)))))))
+
+(defun parse-tcl-string (s)
+  "Parses a tcl string S to a lisp list of strings."
+  (with-input-from-string (str s)
+    (parse-tcl str)))
+
+(defun tcl-lists-to-strings (lst)
+  "Converts sublists in lst to strings.
+
+(\"a\" (\"b\" \"c\") \"d\") -> (\"a\" \"b c\" \"d\")."
+  (mapcar (lambda (x)
+            (if (listp x)
+                (format nil "~{~a~^ ~}" (tcl-lists-to-strings x))
+                x))
+          lst))
+
+(defun window-cget (w option)
+  "Returns the value of the OPTION for the window W."
+  (get-response "~a cget ~a" (window-path w) (key-to-string option)))
+
+(defun window-configure (w &rest options)
+  "Congigures window the window W according to OPTIONS.
+
+A tcl configuration option `-option value` is specified in lisp as
+`:option value`. If no options are given it returns the list of
+current options."
+  (if (null options)
+      (parse-tcl-string (get-response "~a configure" (window-path w)))
+      (loop for opt on options by #'cddr do
+       (configure w (car opt) (cadr opt)))))
+
 (defun window-state (w)
   "Returns the state SPEC of the window W.
 
@@ -224,3 +294,11 @@ If :default is t, sets the icon for subwindows."
   (loop for opt on options by #'cddr do
        (send-command "font configure ~s -~a ~s"
                      font (key-to-string (car opt)) (option-to-string (cadr opt)))))
+
+(defun font-names ()
+  "Returns the fonts names available."
+  (tcl-lists-to-strings (parse-tcl-string (get-response "font names"))))
+
+(defun font-families ()
+  "Returns the font family names available."
+  (tcl-lists-to-strings (parse-tcl-string (get-response "font families"))))

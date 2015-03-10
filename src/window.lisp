@@ -113,18 +113,6 @@ FUN is a function with no arguments."
   "Configures the windows W with OPTION set to VALUE."
   (send-command "~a configure -~a ~s" (window-path w) (key-to-string option) (option-to-string value)))
 
-(defun window-cget (w option)
-  "Returns the value of the OPTION for the window W."
-  (get-response "~a cget ~a" (window-path w) (key-to-string option)))
-
-(defun window-configure (w &rest options)
-  "Congigures window the window W according to OPTIONS.
-
-A tcl configuration option `-option value` is specified in lisp as
-`:option value`."
-  (loop for opt on options by #'cddr do
-       (configure w (car opt) (cadr opt))))
-
 (defun configure-window (w options)
   "Configures the window W according to OPTIONS.
 

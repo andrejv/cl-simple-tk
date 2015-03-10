@@ -142,6 +142,8 @@ call @code{cnv addtag ntag withtag otag}.")
            :font-configure
            :font-create
            :font-delete
+           :font-families
+           :font-names
            :get-open-file
            :get-save-file
            :get-tk-themes
