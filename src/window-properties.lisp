@@ -70,7 +70,7 @@ For a list (- a b c) we get a keyword :abc."
 (defun tcl-lists-to-strings (lst)
   "Converts sublists in lst to strings.
 
-(\"a\" (\"b\" \"c\") \"d\") -> (\"a\" \"b c\" \"d\")."
+\(\"a\" (\"b\" \"c\") \"d\"\) -> \(\"a\" \"b c\" \"d\"\)."
   (mapcar (lambda (x)
             (if (listp x)
                 (format nil "~{~a~^ ~}" (tcl-lists-to-strings x))
@@ -302,3 +302,45 @@ If :default is t, sets the icon for subwindows."
 (defun font-families ()
   "Returns the font family names available."
   (tcl-lists-to-strings (parse-tcl-string (get-response "font families"))))
+
+(defun window-transient (w &key parent)
+  "Sets the transient property for W.
+
+I parent is specified, then W becomes a transient window for
+PARENT. If PARENT is not specified then W becomes a not transient
+window."
+  (send-command "wm transient ~a ~a"
+                (window-path w)
+                (if parent (window-path parent) "")))
+
+(defun grab-set (w &key global)
+  "Sets a grab on window W.
+
+If GLOBAL is t, then sets a global grab."
+  (send-command "grab set ~a ~a"
+                (if global "-global" "")
+                (window-path w)))
+
+(defun grab-release (w)
+  "Releases the grab on window W."
+  (send-command "grab release ~a" (window-path w)))
+
+(defun grab-status (w)
+  "Returns the grab status on W.
+
+Return value is \"none\", \"local\" or \"global\"."
+  (get-response "grab status ~a" (window-path w)))
+
+(defun wait-window (w)
+  "Waits for W to be destroyed."
+  (get-response "tkwait window ~a" (window-path w)))
+
+(defun window-protocol (w name fun)
+  "Registers the function FUN to be called on WM event NAME for window W.
+
+NAME can be WM_DELETE_WINDOW, WM_SAVE_YOURSELF or WM_TAKE_FOCUS."
+  (let ((id (format nil "wmproto~a" (next-id))))
+    (send-command "wm protocol ~a ~a \{call_lisp ~a\}"
+                  (window-path w)
+                  name id)
+    (setf (gethash id *event-table*) fun)))

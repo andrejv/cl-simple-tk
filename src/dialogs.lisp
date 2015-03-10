@@ -27,7 +27,9 @@
   "Opens a dialog box.
 
 Options supported are TITLE, ICON, DEFAULT, DETAIL, PARENT and
-TYPE. Returns the button clicked as a string."
+TYPE. TYPE can be \"abortretryignore\", \"ok\", \"okcancel\",
+\"retrycancel\", \"yesno\" or \"yesnocancel\". Returns the button
+clicked as a string."
   (get-response "tk_messageBox -message ~s -title ~s -icon ~s -default ~s -type ~s -detail ~s -parent ~s" 
                 message title icon default type detail (if parent (window-path parent) ".")))
 

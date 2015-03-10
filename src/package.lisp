@@ -147,6 +147,9 @@ call @code{cnv addtag ntag withtag otag}.")
            :get-open-file
            :get-save-file
            :get-tk-themes
+           :grab-release
+           :grab-set
+           :grab-status
            :grid
            :grid-configure
            :grid-columnconfigure
@@ -342,6 +345,7 @@ call @code{cnv addtag ntag withtag otag}.")
            :window-pointerx
            :window-pointerxy
            :window-pointery
+           :window-protocol
            :window-raise
            :window-resizable
            :window-reqheight
@@ -352,5 +356,7 @@ call @code{cnv addtag ntag withtag otag}.")
            :window-title
            :window-width
            :window-withdraw
+           :window-transient
+           :window-wait
            :with-tk-root))
 
