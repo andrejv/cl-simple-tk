@@ -197,7 +197,7 @@
   (let* ((f (tk:frame :parent nb))
          (l (tk:listbox :parent f)))
     (tk:pack l :fill "x" :expand t :anchor "n" :padx 10 :pady 10)
-    (tk:listbox-insert l 0 "One" "Two" "Three" "Four")
+    (tk:listbox-insert l 0 '("One" "Two" "Three" "Four"))
     (tk:bind-event l "<<ListboxSelect>>"
                    (lambda (ev)
                      (declare (ignore ev))
