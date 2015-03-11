@@ -111,7 +111,7 @@ FUN is a function with no arguments."
 
 (defun configure (w option value)
   "Configures the windows W with OPTION set to VALUE."
-  (send-command "~a configure -~a ~s" (window-path w) (key-to-string option) (option-to-string value)))
+  (send-command "~a configure -~a {~a}" (window-path w) (key-to-string option) (option-to-string value)))
 
 (defun configure-window (w options)
   "Configures the window W according to OPTIONS.

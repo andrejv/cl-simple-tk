@@ -274,6 +274,16 @@ If :default is t, sets the icon for subwindows."
   "Sets the Tk Theme."
   (send-command "ttk::style theme use ~a" theme))
 
+(defun font-format (name &key (size 12) bold italic underline overstrike)
+  "Returns the string representing a font.
+
+The resulting string can be used in the :FONT option to windows."
+  (format nil "{~a} {~a} {~a ~a ~a ~a}" name size
+          (if bold "bold" "")
+          (if italic "italic" "")
+          (if underline "underline" "")
+          (if overstrike "overstrike" "")))
+
 (defun font-create (&key name family size weight slant underline overstrike)
   "Creates the a new font. Returns the name of the font."
   (get-response "font create ~a ~a ~a ~a ~a ~a ~a"
@@ -331,7 +341,7 @@ If GLOBAL is t, then sets a global grab."
 Return value is \"none\", \"local\" or \"global\"."
   (get-response "grab status ~a" (window-path w)))
 
-(defun wait-window (w)
+(defun window-wait (w)
   "Waits for W to be destroyed."
   (get-response "tkwait window ~a" (window-path w)))
 

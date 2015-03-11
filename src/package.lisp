@@ -143,6 +143,7 @@ call @code{cnv addtag ntag withtag otag}.")
            :font-create
            :font-delete
            :font-families
+           :font-format
            :font-names
            :get-open-file
            :get-save-file

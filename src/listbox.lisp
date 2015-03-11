@@ -40,14 +40,16 @@
   (let ((r (get-response "~a curselection" (window-path lbox))))
     (if (string= "" r)
         ()
-        (split-sequence #\Space r))))
+        (mapcar #'parse-integer (split-sequence #\Space r)))))
 
 (defun listbox-delete (lbox first &optional last)
   "Deletes from the listbox"
   (send-command "~a delete ~a ~a" (window-path lbox) first (or last "")))
 
-(defun listbox-insert (lbox ind &rest elts)
+(defun listbox-insert (lbox ind elts)
   "Inserts new elements into the listbox."
+  (unless (listp elts)
+    (setf elts (list elts)))
   (send-command "~a insert ~a ~{~s~^ ~}" (window-path lbox) ind elts))
 
 (defun listbox-see (lbox ind)
