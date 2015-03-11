@@ -49,7 +49,7 @@ The undelying tcl/tk class is " (string name) ".")
 (define-tk-window (entry        "ttk::entry"       "en" window))
 (define-tk-window (spinbox      "ttk::spinbox"     "sp" entry))
 (define-tk-window (frame        "ttk::frame"       "fr" window))
-(define-tk-window (label-frame  "ttk::labelframe"  "lf" window))
+(define-tk-window (labelframe   "ttk::labelframe"  "lf" window))
 (define-tk-window (scale        "ttk::scale"       "sc" window))
 (define-tk-window (progressbar  "ttk::progressbar" "pr" window))
 (define-tk-window (separator    "ttk::separator"   "sp" window))
@@ -102,9 +102,17 @@ If LAST is not specified it deletes one character."
   "Inserts STR at indes IND in editable text in the window ENT."
   (send-command "~a insert ~a ~s" (window-path ent) ind str))
 
+(defun entry-selection-adjust (ent ind)
+  "Adjusts the selection so that it includes char at indes IND."
+  (send-command "~a selection adjust ~a" (window-path ent) ind))
+
 (defun entry-selection-clear (ent)
   "Clears the selection in editable text in ENT."
   (send-command "~a selection clear" (window-path ent)))
+
+(defun entry-selection-from (ent ind)
+  "Sets the selection anchor point to just before the index IND."
+  (send-command "~a selection from ~a" (window-path ent) ind))
 
 (defun entry-selection-present (ent)
   "Check is some text is selected in ENT."
@@ -115,6 +123,10 @@ If LAST is not specified it deletes one character."
 (defun entry-selection-range (ent start end)
   "Sets the selection in ENT from START ot END."
   (send-command "~a selection set ~a ~a" (window-path ent) start end))
+
+(defun entry-selection-to (ent ind)
+  "Sets the selection from selection anchor point to the index IND."
+  (send-command "~a selection to ~a" (window-path ent) ind))
 
 (defun entry-validate (ent)
   "Validates the entry."
@@ -147,3 +159,12 @@ NUMBER is an integer and WHAT can be \"units\" or \"pages\"."
 
 BTN can also be a checkbutton or a radiobutton."
   (send-command "~a invoke" (window-path btn)))
+
+
+(defun combobox-current (cb)
+  "Returns the index of current value in combobox."
+  (get-response "~a current" (window-path cb)))
+
+(defun (setf combobox-current) (new cb)
+  "Sets the value in combobox the the value at index NEW."
+  (send-command "~a current ~a" (window-path cb) new)

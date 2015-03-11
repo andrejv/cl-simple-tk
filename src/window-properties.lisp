@@ -213,6 +213,21 @@ W can be nil for the root window \".\""
       (send-command "destroy .")
       (send-command "destroy ~a" (window-path w))))
 
+(defun window-iconbitmap (w bitmap &key (default nil))
+  "Sets the icon for the window W to the named bitmap BITMAP.
+
+If :default is t, sets the icon for subwindows."
+  (send-command "wm iconbitmap ~a ~a ~a"
+                (window-path w)
+                (if default "-default" "")
+                bitmap))
+
+(defun window-iconmask (w bitmap)
+  "Sets the mask of the icon for the window W to the named bitmap BITMAP."
+  (send-command "wm iconmask ~a ~a"
+                (window-path w)
+                bitmap))
+
 (defun window-iconphoto (w photo &key (default nil))
   "Sets the icon for the window W to the named image PHOTO.
 

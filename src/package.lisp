@@ -118,6 +118,7 @@ call @code{cnv addtag ntag withtag otag}.")
            :clipboard-clear
            :clipboard-get
            :combobox
+           :combobox-current
            :configure-window
            :create-command
            :entry
@@ -127,9 +128,12 @@ call @code{cnv addtag ntag withtag otag}.")
            :entry-icursor
            :entry-index
            :entry-insert
+           :entry-selection-adjust
            :entry-selection-clear
+           :entry-selection-from
            :entry-selection-present
            :entry-selection-range
+           :entry-selection-to
            :entry-validate
            :entry-xview
            :entry-xview-moveto
@@ -296,6 +300,7 @@ call @code{cnv addtag ntag withtag otag}.")
            #+darwin :tk-mac-quit
            :tk-version
            :toplevel
+           :trace-var
            :treeview
            :treeview-bbox
            :treeview-children

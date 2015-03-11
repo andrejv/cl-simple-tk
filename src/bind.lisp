@@ -85,6 +85,12 @@ callback."
     (setf (gethash id *event-table*) fun)
     (send-command (format nil "proc ~a {args} {call_lisp ~a $args}" tk-name id))))
 
+(defun trace-var (var fun)
+  "Calls fun whenever tcl variable VAR is updated."
+  (let ((id (format nil "var~a" (next-id))))
+    (send-command "trace add variable ~a write {call_lisp ~a}" (tcl-var-name var) id)
+    (setf (gethash id *event-table*) fun)))
+
 #+darwin
 (defun tk-mac-about-panel ()
   "Opens a standard about panel on OSX."
