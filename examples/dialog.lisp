@@ -13,13 +13,13 @@
          (entries (font-families))
          result)
 
-    (pack f :expand t :fill "both")
-    (pack f-scroll :expand t :fill "both" :padx 2 :pady 2)
-    
     (setf (window-title top) "Choose Font")
     (window-transient top :parent root)
     (grab-set top)
-    
+
+    (pack f :expand t :fill "both")
+
+    (pack f-scroll :expand t :fill "both" :padx 2 :pady 2)    
     (grid list :sticky "news" :row 0 :column 0)
     (grid s :sticky "ns" :column 1 :row 0)
     (scrollbar-connect list s)
