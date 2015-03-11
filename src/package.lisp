@@ -296,6 +296,7 @@ call @code{cnv addtag ntag withtag otag}.")
            #+darwin :tk-mac-quit
            :tk-version
            :toplevel
+           :trace-var
            :treeview
            :treeview-bbox
            :treeview-children
