@@ -46,6 +46,22 @@
   "Deletes from the listbox"
   (send-command "~a delete ~a ~a" (window-path lbox) first (or last "")))
 
+(defun listbox-get (lbox first &optional last)
+  "Returns the contents of the listbox."
+  (let ((r (get-response "~a get ~a ~a"
+                         (window-path lbox)
+                         first
+                         (if last last ""))))
+    (parse-tcl-string r)))
+
+(defun listbox-index (lbox ind)
+  "Returns the numeric index for IND."
+  (parse-integer (get-response "~a index ~a" (window-path lbox) ind)))
+
+(defun listbox-nearest (lbox y)
+  "Returns the nearest item for y-coordinate Y."
+  (parse-integer (get-response "~a nearest ~a" (window-path lbox) y)))
+
 (defun listbox-insert (lbox ind elts)
   "Inserts new elements into the listbox."
   (unless (listp elts)
@@ -63,6 +79,32 @@
 (defun listbox-scan-dragto (lbox x y &optional gain)
   "Scrolls the listbox according to the scan mar."
   (send-command "~a scan dragto ~a ~a ~a" (window-path lbox) x y (or gain "")))
+
+(defun listbox-selection-anchor (lbox ind)
+  "Sets the anchor for the selection in LBOX."
+  (send-command "~a selection anchor ~a" (window-path lbox) ind))
+
+(defun listbox-selection-clear (lbox start &optional end)
+  "Deselect elements in the listbox."
+  (send-command "~a selection clear ~a ~a"
+                (window-path lbox)
+                start
+                (or end "")))
+
+(defun listbox-selection-includes (lbox ind)
+  "Checks if item at index IND is selected."
+  (string= "1" (get-response "~a selection includes ~a" (window-path lbox) ind)))
+
+(defun listbox-selection-set (lbox start &optional end)
+  "Sets the selection in the listbox."
+  (send-command "~a selection set ~a ~a"
+                (window-path lbox)
+                start
+                (or end "")))
+
+(defun listbox-size (lbox)
+  "Returns the number of elements in the listbox."
+  (parse-integer (get-response "~a size" (window-path lbox))))
 
 (defun listbox-xview (lbox)
   "Returns the xview of the window"

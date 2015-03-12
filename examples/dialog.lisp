@@ -16,6 +16,10 @@
     (setf (window-title top) "Choose Font")
     (window-transient top :parent root)
     (grab-set top)
+    (destructuring-bind ((w h) x y)
+        (window-geometry root)
+      (declare (ignore w h))
+      (setf (window-geometry top) (list () (+ x 30) (+ y 30))))
 
     (pack f :expand t :fill "both")
 
@@ -42,6 +46,11 @@
 (defun main ()
   (with-tk-root (root)
     (setf (window-title root) "Dialog Example")
+    (let ((x (window-screenwidth root))
+          (y (window-screenheight root)))
+      (setf (window-geometry root) (list (list 400 200)
+                                         (- (truncate x 2) 200)
+                                         (- (truncate y 2) 100))))
     (let* ((t-var (string-var))
            (f (frame :parent root :padding '(10 10 10 10)))
            (l (label :parent f :textvariable t-var)))

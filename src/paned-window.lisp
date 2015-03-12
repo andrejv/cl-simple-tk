@@ -63,3 +63,14 @@ Use SETF to set the position."
 (defun (setf panedwindow-sashpos) (newpos pw ind)
   "Sets the sashpos of the subwindow with index IND."
   (send-command "~a sashpos ~a ~a" (window-path pw) ind newpos))
+
+(defun panedwindow-panes (pw)
+  "Returns a list of panes in pw."
+  (split-sequence #\Space
+                  (get-response "~a panes" (window-path pw))))
+
+(defun panedwindow-pane (pw pid &rest options)
+  "Queries/modifies the options of the pane PID."
+  (if (< (length options) 2)
+      (get-response "~a pane ~a ~{~a~^ ~}" (window-path pw) pid options)
+      (pw-pane-config pw pid options)))

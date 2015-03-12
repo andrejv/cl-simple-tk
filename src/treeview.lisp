@@ -82,6 +82,15 @@ Can be modified with SETF."
   "Sets the column anchor property."
   (send-command "~a column ~a -anchor ~a" (window-path tw) col val))
 
+(defun treeview-heading-command (tw heading fun)
+  "Sets the callback FUN for HEADING.
+
+The callback is called when the heading is clicked."
+  (let ((id (format nil "tw_heading~a" (next-id))))
+    (send-command "~a heading ~a -command {call_lisp ~a}"
+                  (window-path tw) heading id)
+    (setf (gethash id *event-table*) fun)))
+
 (defun treeview-delete (tw items)
   "Deletes the ITEMS from the treeview."
   (unless (listp items)
@@ -150,7 +159,7 @@ the other columns."
                 (if id     (format nil "-id ~a" id)                    "")
                 (if image  (format nil "-image ~a" image)              "")
                 (if text   (format nil "-text ~s" text)                "")
-                (if values (format nil "-values \{~{~s~^ ~}\}" values) "")
+                (if values (format nil "-values {~{~s~^ ~}}" values) "")
                 (if open   (format nil "-open \"1\"")                  "")
                 (if tags   (format nil "-tags ~{~s~^ ~}" tags)         "")))
 
@@ -168,7 +177,7 @@ the other columns."
 
 (defun treeview-item-values (tw item)
   "Returns the values of the item."
-  (get-response "~a item ~a -values" (window-path tw) item))
+  (parse-tcl-string (get-response "~a item ~a -values" (window-path tw) item)))
 
 (defun (setf treeview-item-values) (val tw item)
   "Sets the values of the item."

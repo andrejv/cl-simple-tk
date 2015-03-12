@@ -176,16 +176,24 @@ call @code{cnv addtag ntag withtag otag}.")
            :image-write
            :integer-var
            :label
-           :label-frame
+           :labelframe
            :listbox
            :listbox-activate
            :listbox-bbox
            :listbox-curselection
            :listbox-delete
+           :listbox-get
+           :listbox-index
            :listbox-insert
+           :listbox-nearest
            :listbox-scan-dragto
            :listbox-scan-mark
            :listbox-see
+           :listbox-selection-anchor
+           :listbox-selection-clear
+           :listbox-selection-includes
+           :listbox-selection-set
+           :listbox-size
            :listbox-xview
            :listbox-xview-moveto
            :listbox-xview-scroll
@@ -224,6 +232,8 @@ call @code{cnv addtag ntag withtag otag}.")
            :panedwindow-identify-element
            :panedwindow-identify-sash
            :panedwindow-insert
+           :pandewindow-pane
+           :panedwindow-panes
            :panedwindow-sashpos
            :place
            :place-configure
@@ -238,8 +248,11 @@ call @code{cnv addtag ntag withtag otag}.")
            :scale
            :scrollbar
            :scrollbar-connect
+           :scrollbar-delta
+           :scrollbar-fraction
            :separator
            :set-tk-theme
+           :sizegrip
            :spinbox
            :string-var
            :text
@@ -315,6 +328,7 @@ call @code{cnv addtag ntag withtag otag}.")
            :treeview-focus
            :treeview-get
            :treeview-heading-anchor
+           :treeview-heading-command
            :treeview-heading-image
            :treeview-heading-text
            :treeview-insert
@@ -356,11 +370,14 @@ call @code{cnv addtag ntag withtag otag}.")
            :window-resizable
            :window-reqheight
            :window-reqwidth
+           :window-rootx
+           :window-rooty
            :window-screenheight
            :window-screenwidth
            :window-state
            :window-title
            :window-width
+           :window-winfo-geometry
            :window-withdraw
            :window-transient
            :window-wait

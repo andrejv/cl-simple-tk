@@ -53,3 +53,13 @@ SCROLLBAR-CONNECT function."
         (progn
           (send-command "~a configure -command {~a yview}" (window-path s) (window-path w))
           (send-command "~a configure -yscrollcommand {~a set}" (window-path w) (window-path s))))))
+
+(defun scrollbar-delta (s dx dy)
+  "Returns the fractional change corresponding to given change of
+thumb position."
+  (read-from-string (get-response "~a delta ~a ~a" (window-path s) dx dy)))
+
+(defun scrollbar-fraction (s x y)
+  "Returns the fraction corresponding to given point in through area
+of scrollbar."
+  (read-from-string (get-response "~a fraction ~a ~a" (window-path s) x y)))

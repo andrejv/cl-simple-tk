@@ -128,19 +128,30 @@ second for horihontal property."
   (get-response "~a identify element ~a ~a" (window-path w) x y))
 
 (defun window-geometry (w)
-  "Checks if the window W is resizable."
+  "Returns the (WM) geometry of the window."
   (let* ((r (get-response "wm geometry ~a" (window-path w)))
          (r-split (split-sequence #\+ r))
          (wh (split-sequence #\x (car r-split))))
-    (list (parse-integer (car wh))
-          (parse-integer (cadr wh))
+    (list (list (parse-integer (car wh))
+                (parse-integer (cadr wh)))
           (parse-integer (cadr r-split))
           (parse-integer (caddr r-split)))))
 
-(defun (setf window-geometry) (g w)
-  "Sets the geometry of the window W.
+(defun window-winfo-geometry (w)
+  "Returns the (WINFO) geometry of the window."
+  (let* ((r (get-response "winfo geometry ~a" (window-path w)))
+         (r-split (split-sequence #\+ r))
+         (wh (split-sequence #\x (car r-split))))
+    (list (list (parse-integer (car wh))
+                (parse-integer (cadr wh)))
+          (parse-integer (cadr r-split))
+          (parse-integer (caddr r-split)))))
 
-G lis a list of ((w h) x y)."
+
+(defun (setf window-geometry) (g w)
+  "Sets the (WM) geometry of the window W.
+
+G lis a list of ((w h) x y) or a string \"wxh+x+y\"."
   (if (stringp g)
       (send-command "wm geometry ~a ~a" (window-path w) g)
       (let ((size (if (car g)
@@ -369,3 +380,11 @@ NAME can be WM_DELETE_WINDOW, WM_SAVE_YOURSELF or WM_TAKE_FOCUS."
                   (window-path w)
                   name id)
     (setf (gethash id *event-table*) fun)))
+
+(defun window-rootx (w)
+  "Returns the X coordinate of W on the screen."
+  (parse-integer (get-response "winfo rootx ~a" (window-path w))))
+
+(defun window-rooty (w)
+  "Returns the Y coordinate of W on the screen."
+  (parse-integer (get-response "winfo rooty ~a" (window-path w))))

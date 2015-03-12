@@ -50,14 +50,20 @@ The undelying tcl/tk class is " (string name) ".")
 (define-tk-window (spinbox      "ttk::spinbox"     "sp" entry))
 (define-tk-window (frame        "ttk::frame"       "fr" window))
 (define-tk-window (labelframe   "ttk::labelframe"  "lf" window))
-(define-tk-window (scale        "ttk::scale"       "sc" window))
-(define-tk-window (progressbar  "ttk::progressbar" "pr" window))
-(define-tk-window (separator    "ttk::separator"   "sp" window))
+(define-tk-window (scale        "ttk::scale"       "sc" window)
+  (when (getf options :orient)
+    (window-configure w :orien (getf options :orient))))
+(define-tk-window (progressbar  "ttk::progressbar" "pr" window)
+  (when (getf options :orient)
+    (window-configure w :orien (getf options :orient))))
+(define-tk-window (separator    "ttk::separator"   "sp" window)
+  (when (getf options :orient)
+    (window-configure w :orien (getf options :orient))))
 (define-tk-window (toplevel     "toplevel"         "tp" window))
 (define-tk-window (message      "message"          "ms" window))
 (define-tk-window (combobox     "ttk::combobox"    "cx" entry))
 (define-tk-window (menubutton   "ttk::menubutton"  "mb" window))
-(define-tk-window (sizegrig     "ttk::sizegrip"    "sg" window))
+(define-tk-window (sizegrip     "ttk::sizegrip"    "sg" window))
 (define-tk-window (checkbutton  "ttk::checkbutton" "cb" button)
   (setf (window-state w) "!alternate"))
 
@@ -122,7 +128,7 @@ If LAST is not specified it deletes one character."
 
 (defun entry-selection-range (ent start end)
   "Sets the selection in ENT from START ot END."
-  (send-command "~a selection set ~a ~a" (window-path ent) start end))
+  (send-command "~a selection range ~a ~a" (window-path ent) start end))
 
 (defun entry-selection-to (ent ind)
   "Sets the selection from selection anchor point to the index IND."
@@ -160,11 +166,10 @@ NUMBER is an integer and WHAT can be \"units\" or \"pages\"."
 BTN can also be a checkbutton or a radiobutton."
   (send-command "~a invoke" (window-path btn)))
 
-
 (defun combobox-current (cb)
   "Returns the index of current value in combobox."
   (get-response "~a current" (window-path cb)))
 
 (defun (setf combobox-current) (new cb)
   "Sets the value in combobox the the value at index NEW."
-  (send-command "~a current ~a" (window-path cb) new)
+  (send-command "~a current ~a" (window-path cb) new))

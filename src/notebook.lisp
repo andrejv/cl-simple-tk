@@ -76,6 +76,6 @@ The title of the tab is specified with the TEXT keyword."
       (nb-tab-config n tid options)))
 
 (defun notebook-tabs (n)
-  "Returns a list of tabe in N."
+  "Returns a list of tabs in N."
   (split-sequence #\Space
                   (get-response "~a tabs" (window-path n))))
