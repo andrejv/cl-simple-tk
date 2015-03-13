@@ -15,3 +15,5 @@ A small example of a window with one button.
                 :command (lambda ()
                            (window-destroy r)))))
 ```
+
+More examples are listed at the [wiki](https://github.com/andrejv/cl-simple-tk/wiki).
