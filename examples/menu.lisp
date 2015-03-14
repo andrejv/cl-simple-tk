@@ -27,7 +27,8 @@
       (menu-add-cascade file "Submenu" sub)
       (menu-add-command file "Open"
                         (lambda ()
-                          (setf (var-value var) "open")))
+                          (setf (var-value var) "open"))
+                        :accelerator "CTRL-O")
       (menu-add-separator file)
       (menu-add-command file "Quit"
                         (lambda ()

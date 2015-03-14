@@ -201,11 +201,21 @@ call @code{cnv addtag ntag withtag otag}.")
            :listbox-yview-moveto
            :listbox-yview-scroll
            :menu
+           :menu-activate
            :menu-add-cascade
            :menu-add-checkbutton
            :menu-add-command
            :menu-add-radio
            :menu-add-separator
+           :menu-entrycget
+           :menu-entryconfigure
+           :menu-index
+           :menu-insert-cascade
+           :menu-insert-checkbutton
+           :menu-insert-command
+           :menu-insert-radio
+           :menu-insert-separator
+           :menu-invoke
            :menu-popup
            :menubutton
            :message
