@@ -46,7 +46,7 @@ call @code{cnv addtag ntag withtag otag}.")
            :canvas-addtag
            :canvas-addtag-above
            :canvas-addtag-all
-           :canvas-addtag-blow
+           :canvas-addtag-below
            :canvas-addtag-closest
            :canvas-addtag-enclosed
            :canvas-addtag-overlapping

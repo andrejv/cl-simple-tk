@@ -45,7 +45,7 @@ RECTANGLE or TEXT. Returns the id of the creaated item."
     "Adds NEWTAG to the item directly above TAG."
   "above" tag)
 
-(canvas-tag-method (canvas-addtag-blow (tag))
+(canvas-tag-method (canvas-addtag-below (tag))
     "Adds NEWTAG to the item directly below TAG."
   "below" tag)
 
@@ -245,6 +245,7 @@ Function FUN accepts one argument."
 (defun canvas-rchars (canvas tid first last str)
   "Replaces the chars between FIRST and LAST in item TID with STR."
   (send-command "~a rchars ~a ~a ~a ~s" (window-path canvas) tid first last str))
+
 
 (defun canvas-scale (canvas tid xorigin yorigin xscale yscale)
   "Scales the item TID.
