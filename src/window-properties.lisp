@@ -36,15 +36,15 @@ For a list (- a b c) we get a keyword :abc."
   (unless (peek-char t s nil nil)
     (return-from parse-part ()))
   (loop
-     for c = (read-char s nil 'eof)
-     when (or (eql c #\})
-              (eql c #\{)) do
+     for c = (read-char s nil #\Space)
+     when (or (char= c #\})
+              (char= c #\{)) do
        (progn
          (unread-char c s)
-         (return (make-string-or-key str)))
-     when (or (eql c 'eof)
-              (eql c #\Space))do
-       (return (make-string-or-key str))
+         (return str))
+     when (char= c #\Space)
+     do
+       (return str)
      collect c into str))
 
 (defun parse-tcl (s)
@@ -52,15 +52,15 @@ For a list (- a b c) we get a keyword :abc."
     (return-from parse-tcl ()))
   (let ((c (read-char s nil #\})))
     (cond
-      ((eql c #\})
+      ((char= c #\})
        ())
-      ((eql c #\{)
+      ((char= c #\{)
        (let ((sub (parse-tcl s)))
          (cons sub (parse-tcl s))))
       (t
        (unread-char c s)
        (let ((part (parse-part s)))
-         (cons part (parse-tcl s)))))))
+         (cons (make-string-or-key part) (parse-tcl s)))))))
 
 (defun parse-tcl-string (s)
   "Parses a tcl string S to a lisp list of strings."

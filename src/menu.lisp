@@ -73,7 +73,7 @@ menu item."
 
 (defun menu-delete (m start &optional end)
   "Deletes entries from M."
-  (send-command "~a delete ~a ~a" (window-path m) star (or end "")))
+  (send-command "~a delete ~a ~a" (window-path m) start (or end "")))
 
 (defun menu-insert-command (m ind label fun)
   "Inserts a new command item to the menu.
@@ -111,7 +111,6 @@ VARIABLE is the tcl variable which can be used to check the state of
 menu item."
   (send-command "~a insert ~a checkbutton -label ~s -variable ~a ~a"
                 (window-path m) ind label variable (menu-conf-string options)))
-
 
 (defun menu-activate (m ind)
   "Activates the entry at index IND."

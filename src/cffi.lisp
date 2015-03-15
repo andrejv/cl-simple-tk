@@ -31,6 +31,9 @@
 (defvar *event-table* nil
   "Hastable mapping window paths to event handlers.")
 
+(defvar *root-window* nil
+  "The main root window of the application.")
+
 (defconstant +tcl-ok+ 0
   "Functions return TCL_OK on success.")
 
@@ -114,7 +117,15 @@
 	  (when *debug*
 	    (format t "~{~a~^ ~}~%" (reverse args)))))
     (error (e)
-      (format t "TCL callback error: ~a~%" e)))
+      (let ((title "Error")
+            (message "Callback error")
+            (detail (format nil "~a~%~%Close the program?" e)))
+        (when (string=
+               (get-response
+                "tk_messageBox -title ~a -message {~a} -detail {~a} -icon error -default yes -type yesno"
+                title message detail message)
+               "yes")
+          (window-destroy *root-window*)))))
   0)
 
 (defun init-session ()
