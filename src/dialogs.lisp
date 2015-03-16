@@ -53,7 +53,6 @@ Returns the result as a string."
   "Opens a \"file open\" dialog.
 
 Returns the result as a string."
-  (print filetypes)
   (get-response "tk_getOpenFile -title ~s -initialdir ~s -initialfile ~s -parent ~a ~a"
                 title initialdir initialfile
                 (if parent (window-path parent) ".")
