@@ -31,6 +31,33 @@ Function FUN accepts one argument EVT."
                   (window-path win) ev id)
     (setf (gethash id *event-table*) fun)))
 
+(defun bind-class (class ev fun)
+  "Binds the event EVT in all windows of CLASS with function FUN."
+  (let ((id (string-downcase (format nil "~a.class.~e" class ev))))
+    (send-command "bind ~a ~a \{call_lisp ~a %x %y %A %W\}"
+                  class ev id)
+    (setf (gethash id *event-table*) fun)))
+
+
+(defun bind-all (ev fun)
+  "Binds the event EVT for all windows with function FUN."
+  (let ((id (string-downcase (format nil "all.~e" ev))))
+    (send-command "bind all ~a \{call_lisp ~a %x %y %A %W\}"
+                  ev id)
+    (setf (gethash id *event-table*) fun)))
+
+(defun event-add (virtual &rest sequence)
+  "Creates a new virtual event triggered by event SEQUENCE."
+  (send-command "event add ~a ~{~a~^ }" virtual sequence))
+
+(defun event-delete (virtual &rest sequence)
+  "Deletes SEQUENCE from virtual event VIRTUAL."
+  (send-command "event delete ~a ~{~a~^ }" virtual sequence))
+
+(defun event-generate (w ev &rest options)
+  "Generates the event EV in the window W."
+  (send-command "event generate ~a ~a ~a" (window-path w) ev (options-conf-string options)))
+
 (defun event-mouse-position (evt)
   "Returns the X and Y coordinate of the EVENT in a list.
 

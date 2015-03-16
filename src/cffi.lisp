@@ -155,7 +155,10 @@
     (when *debug*
       (format t "~a~%" cmd))
     (if (= (tcl-eval *current-interp* cmd) +tcl-ok+)
-        (tcl-get-string-result *current-interp*)
+        (let ((s (tcl-get-string-result *current-interp*)))
+          (when *debug*
+            (format t "~a~%" s))
+          s)
         (progn
           (warn (format nil "TCL error: ~a~%" (tcl-get-string-result *current-interp*)))
           ""))))

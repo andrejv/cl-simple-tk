@@ -42,6 +42,12 @@
         ()
         (mapcar #'parse-integer (split-sequence #\Space r)))))
 
+(defun (setf listbox-curselection) (val lbox)
+  "Sets the selecion."
+  (if (listp val)
+      (listbox-selection-set lbox (car val) (cadr val))
+      (listbox-selection-set lbox val)))
+
 (defun listbox-delete (lbox first &optional last)
   "Deletes from the listbox"
   (send-command "~a delete ~a ~a" (window-path lbox) first (or last "")))
@@ -52,7 +58,9 @@
                          (window-path lbox)
                          first
                          (if last last ""))))
-    (parse-tcl-string r)))
+    (if last
+        (parse-tcl-string r)
+        r)))
 
 (defun listbox-index (lbox ind)
   "Returns the numeric index for IND."

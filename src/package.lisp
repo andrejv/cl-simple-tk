@@ -37,6 +37,8 @@ call @code{cnv addtag ntag withtag otag}.")
   (:export :after
            :after-cancel
            :after-idle
+           :bind-all
+           :bind-class
            :bind-command
            :bind-event
            :boolean-var
@@ -138,6 +140,7 @@ call @code{cnv addtag ntag withtag otag}.")
            :entry-xview
            :entry-xview-moveto
            :entry-xview-scroll
+           :event-generate
            :event-key-code
            :event-mouse-position
            :event-window-path

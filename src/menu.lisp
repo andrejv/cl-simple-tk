@@ -24,12 +24,6 @@
 
 (define-tk-window (menu "menu" "mn" window))
 
-(defun menu-conf-string (options)
-  (let ((zip (loop for (opt val) on options by #'cddr
-                collect (list (concatenate 'string "-" (key-to-string opt))
-                              (option-to-string val)))))
-    (format nil "~{~{~a~^ ~}~^ ~}" zip)))
-
 (defun menu-popup (m x y)
   "Shows the menu M at X,Y."
   (send-command "tk_popup ~a ~a ~a"
@@ -41,7 +35,7 @@
 FUN is the function with no arguments which is called then the menu is selected."
   (let ((id (string-downcase (format nil "~a.mcmd~a" (window-path m) (next-id)))))
     (send-command "~a add command -label ~s -command \{call_lisp ~a} ~a"
-                  (window-path m) label id (menu-conf-string options))
+                  (window-path m) label id (options-conf-string options))
     (when (functionp fun)
       (setf (gethash id *event-table*) fun))))
 
@@ -50,7 +44,7 @@ FUN is the function with no arguments which is called then the menu is selected.
 
 VARIABLE and VALUE are used to check if the radio is selected."
   (send-command "~a add radio -label ~s -variable ~a -value ~a ~a"
-                (window-path m) label variable value (menu-conf-string options)))
+                (window-path m) label variable value (options-conf-string options)))
 
 (defun menu-add-separator (m)
   "Adds a separator to the menu M."
@@ -61,7 +55,7 @@ VARIABLE and VALUE are used to check if the radio is selected."
   (send-command "~a add cascade -menu ~a ~a ~a"
                 (window-path m) (window-path submenu)
                 (if (string= label "") "" (format nil "-label ~s" label))
-                (menu-conf-string options)))
+                (options-conf-string options)))
 
 (defun menu-add-checkbutton (m label variable &rest options)
   "Adds a new checkbutton to the menu M.
@@ -69,7 +63,7 @@ VARIABLE and VALUE are used to check if the radio is selected."
 VARIABLE is the tcl variable which can be used to check the state of
 menu item."
   (send-command "~a add checkbutton -label ~s -variable ~a ~a"
-                (window-path m) label variable (menu-conf-string options)))
+                (window-path m) label variable (options-conf-string options)))
 
 (defun menu-delete (m start &optional end)
   "Deletes entries from M."
@@ -91,7 +85,7 @@ FUN is the function with no arguments which is called then the menu is selected.
 VARIABLE and VALUE are used to check if the radio is selected."
   (send-command "~a insert ~a radio -label ~s -variable ~a -value ~a ~a"
                 (window-path m) ind label variable value
-                (menu-conf-string options)))
+                (options-conf-string options)))
 
 (defun menu-insert-separator (m ind)
   "Inserts a separator to the menu M."
@@ -102,7 +96,7 @@ VARIABLE and VALUE are used to check if the radio is selected."
   (send-command "~a insert ~a cascade -menu ~a ~a ~a"
                 (window-path m) ind (window-path submenu)
                 (if (string= label "") "" (format nil "-label ~s" label))
-                (menu-conf-string options)))
+                (options-conf-string options)))
 
 (defun menu-insert-checkbutton (m ind label variable &rest options)
   "Inserts a new checkbutton to the menu M.
@@ -110,7 +104,7 @@ VARIABLE and VALUE are used to check if the radio is selected."
 VARIABLE is the tcl variable which can be used to check the state of
 menu item."
   (send-command "~a insert ~a checkbutton -label ~s -variable ~a ~a"
-                (window-path m) ind label variable (menu-conf-string options)))
+                (window-path m) ind label variable (options-conf-string options)))
 
 (defun menu-activate (m ind)
   "Activates the entry at index IND."

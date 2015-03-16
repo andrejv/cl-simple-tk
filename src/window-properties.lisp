@@ -77,6 +77,12 @@ For a list (- a b c) we get a keyword :abc."
                 x))
           lst))
 
+(defun options-conf-string (options)
+  (let ((zip (loop for (opt val) on options by #'cddr
+                collect (list (concatenate 'string "-" (key-to-string opt))
+                              (option-to-string val)))))
+    (format nil "~{~{~a~^ ~}~^ ~}" zip)))
+
 (defun window-cget (w option)
   "Returns the value of the OPTION for the window W."
   (get-response "~a cget ~a" (window-path w) (key-to-string option)))
