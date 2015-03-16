@@ -142,6 +142,7 @@ call @code{cnv addtag ntag withtag otag}.")
            :event-mouse-position
            :event-window-path
            :float-var
+           :format-lisp-list
            :frame
            :font-configure
            :font-create

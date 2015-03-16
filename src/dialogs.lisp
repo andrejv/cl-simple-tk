@@ -49,13 +49,15 @@ Returns the result as a string."
                 (if mustexist "1" "0")))
 
 (defun get-open-file (&key (title "Choose file") parent
-                        (initialdir "") (initialfile) filetypes)
+                        (initialdir "") (initialfile "") filetypes)
   "Opens a \"file open\" dialog.
 
 Returns the result as a string."
-  (get-response "tk_getOpenFile -title ~s -initialdir ~s -initialfile ~s -parent ~s"
-                title initialdir initialfile (if parent (window-path parent) ".")
-                (if filetypes (format nil "-filetypes ~a" filetypes) "")))
+  (print filetypes)
+  (get-response "tk_getOpenFile -title ~s -initialdir ~s -initialfile ~s -parent ~a ~a"
+                title initialdir initialfile
+                (if parent (window-path parent) ".")
+                (if filetypes (format nil "-filetypes ~a" (format-lisp-lists filetypes)) "")))
 
 (defun get-save-file (&key (title "Choose file") parent
                         (initialdir "") (initialfile "") filetypes
@@ -65,5 +67,5 @@ Returns the result as a string."
 Returns the result as a string."
   (get-response "tk_getSaveFile -title ~s -initialdir ~s -initialfile ~s -parent ~s ~a -confirmoverwrite ~a"
                 title initialdir initialfile (if parent (window-path parent) ".")
-                (if filetypes (format nil "-filetypes ~a" filetypes) "")
+                (if filetypes (format nil "-filetypes ~a" (format-lisp-lists filetypes)) "")
                 (if confirmoverwrite "1" "0")))

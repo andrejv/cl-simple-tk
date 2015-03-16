@@ -39,6 +39,12 @@
   "Converts a keyword K to a downcase string."
   (string-downcase (string k)))
 
+(defun format-lisp-lists (lst)
+  "Changes lisp lists to tcl lists."
+  (if (listp lst)
+      (format nil "{~{~a~^ ~}}" (mapcar #'format-lisp-lists lst))
+      (format nil "~s" lst)))
+
 (defun option-to-string (o)
   "Converts an object O to a string representation for tcl interpreter."
   (cond ((stringp o) o)

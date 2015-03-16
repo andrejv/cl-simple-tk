@@ -242,11 +242,13 @@
       (tk:menu-add-command file"Choose Color"
                            (lambda () (print (tk:choose-color :initial "white"))))
       (tk:menu-add-command file "File Open"
-                           (lambda () (print (tk:get-open-file))))
+                           (lambda () (print (tk:get-open-file :parent r
+                                              :filetypes '(("Text file" "*.txt") ("All files" "*.*"))))))
       (tk:menu-add-command file "Select Dir"
                            (lambda () (print (tk:choose-directory))))
       (tk:menu-add-command file "Save File"
-                           (lambda () (print (tk:get-save-file))))
+                           (lambda () (print (tk:get-save-file
+                                              :filetypes '(("Text file " "*.txt") ("All files" "*.*"))))))
       (tk:menu-add-separator file)
       (tk:menu-add-command file "Exit" (lambda () (tk:window-destroy r)))
       ;; help menu on OSX - should be the last thing added to menubar
