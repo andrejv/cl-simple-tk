@@ -33,7 +33,7 @@
 
 (defun treeview-children (tw item)
   "Returns the list of childtren blonging to ITEM."
-  (let ((r (get-response "~a children ~a" (window-path tw) item)))
+  (let ((r (get-response "~a children ~s" (window-path tw) item)))
     (if (string= "" r)
         ()
         (split-sequence #\Space r))))
@@ -95,13 +95,13 @@ The callback is called when the heading is clicked."
   "Deletes the ITEMS from the treeview."
   (unless (listp items)
     (setf items (list items)))
-  (send-command "~a delete ~{~a~^ ~}" (window-path tw) items))
+  (send-command "~a delete {~{~a~^ ~}}" (window-path tw) items))
 
 (defun treeview-detach (tw items)
   "Detaches the ITEMS from the treeview."
   (unless (listp items)
     (setf items (list items)))
-  (send-command "~a detach ~{~a~^ ~}" (window-path tw) items))
+  (send-command "~a detach {~{~a~^ ~}}" (window-path tw) items))
 
 (defun treeview-exists (tw item)
   "Checks if the ITEM exists in TW."
@@ -144,6 +144,24 @@ Can be modified with SETF."
 (defun (setf treeview-heading-anchor) (val tw col)
   "Sets the anchor of the heading COL."
   (send-command "~a heading ~a -anchor ~a" (window-path tw) col val))
+
+(defun treeview-identify-region (tw x y)
+  "Identifies the region at (X,Y).
+
+Returns \"heading\", \"separator\", \"tree\" or \"cell\."
+  (get-response "~a identify region ~a ~a" (window-path tw) x y))
+
+(defun treeview-identify-column (tw x y)
+  "Identifies the column at (X,Y)."
+  (get-response "~a identify column ~a ~a" (window-path tw) x y))
+
+(defun treeview-identify-element (tw x y)
+  "Identifies the element at (X,Y)."
+  (get-response "~a identify element ~a ~a" (window-path tw) x y))
+
+(defun treeview-identify-item (tw x y)
+  "Identifies the item at (X,Y)."
+  (get-response "~a identify item ~a ~a" (window-path tw) x y))
 
 (defun treeview-insert (tw parent index &key (id) (text) (image) (values) (open) (tags))
   "Inserts a new item.
@@ -218,7 +236,7 @@ the other columns."
   "Sets the selection in TW."
   (unless (listp ilist)
     (setf ilist (list ilist)))
-  (send-command "~a selection set ~{~a~^ ~}" (window-path tw) ilist))
+  (send-command "~a selection set {~{~a~^ ~}}" (window-path tw) ilist))
 
 (defun treeview-selection-add (tw ilist)
   "Adds ILIST to the selection in TW."
@@ -230,10 +248,10 @@ the other columns."
   "Removes from ILIST the selection in TW."
   (unless (listp ilist)
     (setf ilist (list ilist)))
-  (send-command "~a selection remove ~{~a~^ ~}" (window-path tw) ilist))
+  (send-command "~a selection remove {~{~a~^ ~}}" (window-path tw) ilist))
 
 (defun treeview-selection-toggle (tw ilist)
   "Toggles the selection of ILIST in TW."
   (unless (listp ilist)
     (setf ilist (list ilist)))
-  (send-command "~a selection toggle ~{~a~^ ~}" (window-path tw) ilist))
+  (send-command "~a selection toggle {~{~a~^ ~}}" (window-path tw) ilist))

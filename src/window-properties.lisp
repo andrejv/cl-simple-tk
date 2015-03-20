@@ -38,7 +38,8 @@ For a list (- a b c) we get a keyword :abc."
   (loop
      for c = (read-char s nil #\Space)
      when (or (char= c #\})
-              (char= c #\{)) do
+              (char= c #\{))
+     do
        (progn
          (unread-char c s)
          (return str))
@@ -57,6 +58,10 @@ For a list (- a b c) we get a keyword :abc."
       ((char= c #\{)
        (let ((sub (parse-tcl s)))
          (cons sub (parse-tcl s))))
+      ((char= c #\")
+       (unread-char c s)
+       (let ((part (read s)))
+         (cons part (parse-tcl s))))
       (t
        (unread-char c s)
        (let ((part (parse-part s)))
@@ -198,7 +203,7 @@ G lis a list of ((w h) x y) or a string \"wxh+x+y\"."
 
 (defun window-reqheight (w)
   "Returns the requested height of the window W."
-  (parse-integer (get-response "winfo reqwidth ~a" (window-path w))))
+  (parse-integer (get-response "winfo reqheight ~a" (window-path w))))
 
 (defun window-minsize (w)
   "Returns the minsize of the window."
@@ -269,6 +274,10 @@ If :default is t, sets the icon for subwindows."
 (defun (setf window-title) (title w)
   "Sets the title of the window W."
   (send-command "wm title ~a ~s" (window-path w) title))
+
+(defun window-toplevel (w)
+  "Returns the toplevel window of W."
+  (send-command "winfo toplevel ~a" (window-path w)))
 
 (defun window-pointerx (w)
   "Returns the X coordinate of the mouse if it is on the same screen as W."
@@ -394,3 +403,26 @@ NAME can be WM_DELETE_WINDOW, WM_SAVE_YOURSELF or WM_TAKE_FOCUS."
 (defun window-rooty (w)
   "Returns the Y coordinate of W on the screen."
   (parse-integer (get-response "winfo rooty ~a" (window-path w))))
+
+(defun window-exists (path)
+  "Checks if we have a TCL window with PATH."
+  (string= "1" (get-response "winfo exists ~a"
+                             (if (stringp path)
+                                 path
+                                 (window-path path)))))
+
+(defun window-vrootwidth (w)
+  "Returns the width of the virtual root window of W."
+  (parse-integer (get-response "winfo vrootwidth ~a" (window-path w))))
+
+(defun window-vrootheight (w)
+  "Returns the height of the virtual root window or W."
+  (parse-integer (get-response "winfo vrootheight ~a" (window-path w))))
+
+(defun window-vrootx (w)
+  "Returns the x coordinate of the virtual root window of W."
+  (parse-integer (get-response "winfo vrootx ~a" (window-path w))))
+
+(defun window-wrooty (w)
+  "Returns the y coordinate of the virtual root window or W."
+  (parse-integer (get-response "winfo vrooty ~a" (window-path w))))

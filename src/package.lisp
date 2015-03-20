@@ -345,6 +345,10 @@ call @code{cnv addtag ntag withtag otag}.")
            :treeview-heading-command
            :treeview-heading-image
            :treeview-heading-text
+           :treeview-identify-column
+           :treeview-identify-element
+           :treeview-identify-item
+           :treeview-identify-region
            :treeview-insert
            :treeview-item-id
            :treeview-item-text
@@ -365,6 +369,7 @@ call @code{cnv addtag ntag withtag otag}.")
            :window-configure
            :window-deiconify
            :window-destroy
+           :window-exists
            :window-focus
            :window-from-path
            :window-geometry
@@ -376,6 +381,7 @@ call @code{cnv addtag ntag withtag otag}.")
            :window-lower
            :window-maxsize
            :window-minsize
+           :window-path
            :window-pointerx
            :window-pointerxy
            :window-pointery
@@ -390,10 +396,15 @@ call @code{cnv addtag ntag withtag otag}.")
            :window-screenwidth
            :window-state
            :window-title
+           :window-toplevel
            :window-width
            :window-winfo-geometry
            :window-withdraw
            :window-transient
            :window-wait
+           :window-vrootheight
+           :window-vrootwidth
+           :window-vrootx
+           :window-vrooty
            :with-tk-root))
 

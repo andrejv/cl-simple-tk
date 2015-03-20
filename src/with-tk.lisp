@@ -22,23 +22,26 @@
 
 (in-package :simple-tk)
 
+(defmacro with-tk ((root title) &body body)
+  `(let* ((*event-table* (make-hash-table :test #'equal))
+          (*window-table* (make-hash-table :test #'equal))
+          (*current-interp* (init-session))
+          (,root (toplevel :tk-name "." :tk-define nil)))
+     (setf (gethash "." *window-table*) ,root)
+     (send-command (format nil "wm title . ~s" ,title))
+     ,@body
+     (send-command "catch { console hide }")
+     (tk-main-loop)
+     (tcl-delete-interp *current-interp*)))
+
 #+(and sbcl darwin)
 (defmacro with-tk-root ((root &key (title "TK")) &body body)
   "Opens the TCL/TK session.
-
+ 
 All code should be called from within WITH-TK-ROOT."
   `(sb-int:with-float-traps-masked (:underflow :overflow :inexact :invalid :divide-by-zero)
-     (let* ((*event-table* (make-hash-table :test #'equal))
-            (*window-table* (make-hash-table :test #'equal))
-            (*current-interp* (init-session))
-            (,root (toplevel :tk-name "." :tk-define nil))
-            (*root-window* ,root))
-       (setf (gethash "." *window-table*) ,root)
-       (send-command (format nil "wm title . ~s" ,title))
-       ,@body
-       (send-command "catch { console hide }")
-       (tk-main-loop)
-       (tcl-delete-interp *current-interp*))))
+     (with-tk (,root ,title)
+       ,@body)))
 
 #+(and cmucl darwin)
 (defmacro with-tk-root ((root &key (title "TK")) &body body)
@@ -46,16 +49,8 @@ All code should be called from within WITH-TK-ROOT."
 
 All code should be called from within WITH-TK-ROOT."
   `(ext:with-float-traps-masked (:underflow :overflow :inexact :invalid :divide-by-zero)
-     (let* ((*event-table* (make-hash-table :test #'equal))
-            (*window-table* (make-hash-table :test #'equal))
-            (*current-interp* (init-session))
-            (,root (toplevel :tk-name "." :tk-define nil)))
-       (setf (gethash "." *window-table*) ,root)
-       (send-command (format nil "wm title . ~s" ,title))
-       ,@body
-       (send-command "catch { console hide }")
-       (tk-main-loop)
-       (tcl-delete-interp *current-interp*))))
+     (with-tk (,root ,title)
+       ,@body)))
 
 #+(and ccl darwin)
 (defmacro with-tk-root ((root &key (title "TK")) &body body)
@@ -63,16 +58,8 @@ All code should be called from within WITH-TK-ROOT."
 
 All code should be called from within WITH-TK-ROOT."
   `(flet ((thunk ()
-            (let* ((*event-table* (make-hash-table :test #'equal))
-                   (*window-table* (make-hash-table :test #'equal))
-                   (*current-interp* (init-session))
-                   (,root (toplevel :tk-name "." :tk-define nil)))
-              (setf (gethash "." *window-table*) ,root)
-              (send-command (format nil "wm title . ~s" ,title))
-              ,@body
-              (send-command "catch { console hide }")
-              (tk-main-loop)
-              (tcl-delete-interp *current-interp*))))
+            (with-tk (,root ,title)
+              ,@body)))
      (let ((s (ccl:make-semaphore)))
        (ccl:process-interrupt ccl::*initial-process* (lambda () (thunk) (ccl:signal-semaphore s)))
        (ccl:wait-on-semaphore s))))
@@ -82,13 +69,5 @@ All code should be called from within WITH-TK-ROOT."
   "Opens the TCL/TK session.
 
 All code should be called from within WITH-TK-ROOT."
-  `(let* ((*event-table* (make-hash-table :test #'equal))
-          (*window-table* (make-hash-table :test #'equal))
-          (*current-interp* (init-session))
-          (,root (toplevel :tk-name "." :tk-define nil))
-          (*root-window* ,root))
-     (setf (gethash "." *window-table*) ,root)
-     (send-command (format nil "wm title . ~s" ,title))
-     ,@body
-     (tk-main-loop)
-     (tcl-delete-interp *current-interp*)))
+  `(with-tk (,root ,title)
+     ,@body))

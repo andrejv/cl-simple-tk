@@ -27,9 +27,14 @@
 
 Function FUN accepts one argument EVT."
   (let ((id (string-downcase (format nil "~a.~e" (window-path win) ev))))
-    (send-command "bind ~a ~a \{call_lisp ~a %x %y %A %W\}"
-                  (window-path win) ev id)
-    (setf (gethash id *event-table*) fun)))
+    (if fun
+        (progn
+          (send-command "bind ~a ~a \{call_lisp ~a %x %y %A %W\}"
+                        (window-path win) ev id)
+          (setf (gethash id *event-table*) fun))
+        (progn
+          (send-command "bind ~a ~a {}" (window-path win) ev)
+          (remhash id *event-table*)))))
 
 (defun bind-class (class ev fun)
   "Binds the event EVT in all windows of CLASS with function FUN."
