@@ -59,6 +59,9 @@ All code should be called from within WITH-TK-ROOT."
 All code should be called from within WITH-TK-ROOT."
   `(flet ((thunk ()
             (with-tk (,root ,title)
+              (tk-mac-quit (lambda (&rest args)
+                             (declare (ignore args))
+                             (ccl:quit)))
               ,@body)))
      (let ((s (ccl:make-semaphore)))
        (ccl:process-interrupt ccl::*initial-process* (lambda () (thunk) (ccl:signal-semaphore s)))

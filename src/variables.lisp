@@ -46,33 +46,39 @@
 TYPE can be :STRING (default), :INTEGER or :FLOAT."
   (make-instance 'tcl-var :type type))
 
-(defun integer-var ()
+
+(defmacro define-variable-type (fun-name type docs)
+  `(defun ,fun-name (&optional init)
+     ,docs
+     (let ((var (tcl-variable :type ,type)))
+       (when init
+         (setf (var-value var) init))
+       var)))
+
+(define-variable-type integer-var :integer
   "Defines an integer tcl variable.
 
 The value of the variable is obtaines with VAR-VALUE function and can
-be modified with SETF."
-  (tcl-variable :type :integer))
+be modified with SETF.")
 
-(defun string-var ()
+
+(define-variable-type string-var :string
   "Defines a string tcl variable.
 
 The value of the variable is obtaines with VAR-VALUE function and can
-be modified with SETF."
-  (tcl-variable :type :string))
+be modified with SETF.")
 
-(defun float-var ()
+(define-variable-type float-var :float
   "Defines a float tcl variable.
 
 The value of the variable is obtaines with VAR-VALUE function and can
-be modified with SETF."
-  (tcl-variable :type :float))
+be modified with SETF.")
 
-(defun boolean-var ()
+(define-variable-type boolean-var :boolean
   "Defines a string tcl variable.
 
 The value of the variable is obtaines with VAR-VALUE function and can
-be modified with SETF."
-  (tcl-variable :type :boolean))
+be modified with SETF.")
 
 (defun var-value (var)
   "Returns the value of a tcl variable VAR.
