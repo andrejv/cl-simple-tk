@@ -64,7 +64,11 @@ All code should be called from within WITH-TK-ROOT."
                              (ccl:quit)))
               ,@body)))
      (let ((s (ccl:make-semaphore)))
-       (ccl:process-interrupt ccl::*initial-process* (lambda () (thunk) (ccl:signal-semaphore s)))
+       (ccl:process-interrupt ccl::*initial-process*
+                              (lambda ()
+                                (unwind-protect
+                                     (thunk)
+                                  (ccl:signal-semaphore s))))
        (ccl:wait-on-semaphore s))))
 
 #-(and darwin (or sbcl cmucl ccl))

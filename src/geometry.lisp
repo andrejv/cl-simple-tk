@@ -28,14 +28,13 @@
            (if (string= s "\{\}")
                ""
                s)))
-    (if (string= str "")
-        ()
-        (let ((lst (split-sequence #\Space str)))
-          (loop
-             for (k o) on lst by #'cddr
-             collect (intern (subseq (string-upcase k) 1) "KEYWORD") into opt
-             collect (replace-curly o) into opt
-             finally (return opt))))))
+    (unless (string= str "")
+      (let ((lst (split-sequence #\Space str)))
+        (loop
+           for (k o) on lst by #'cddr
+           collect (intern (subseq (string-upcase k) 1) "KEYWORD") into opt
+           collect (replace-curly o) into opt
+           finally (return opt))))))
 
 (defun grid (wlist &rest options)
   "GRID geometry manager.
@@ -83,10 +82,9 @@ Returns a PLIST of options."
   (let ((r (get-response "grid slaves ~a ~a ~a" (window-path w)
                          (if row (format nil "-row ~a" row) "")
                          (if column (format nil "-column ~a" column) ""))))
-    (if (string= r "")
-        ()
-        (mapcar #'window-from-path
-                (split-sequence #\Space r)))))
+    (unless (string= r "")
+      (mapcar #'window-from-path
+              (split-sequence #\Space r)))))
 
 (defun pack (wlist &rest options)
   "PACK geometry manager.
@@ -120,10 +118,9 @@ Returns a PLIST of options."
 (defun pack-slaves (w)
   "Returns the list of slaves in master W."
   (let ((r (get-response "pack slaves ~a" (window-path w))))
-    (if (string= r "")
-        ()
-        (mapcar #'window-from-path
-                (split-sequence #\Space r)))))
+    (unless (string= r "")
+      (mapcar #'window-from-path
+              (split-sequence #\Space r)))))
 
 (defun place (w &rest options)
   "PLACE geometry manager."
@@ -152,7 +149,6 @@ Returns a PLIST of options."
 (defun place-slaves (w)
   "Returns the list of slaves in master W."
   (let ((r (get-response "place slaves ~a" (window-path w))))
-    (if (string= r "")
-        ()
-        (mapcar #'window-from-path
-                (split-sequence #\Space r)))))
+    (unless (string= r "")
+      (mapcar #'window-from-path
+              (split-sequence #\Space r)))))

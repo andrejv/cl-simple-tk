@@ -38,9 +38,8 @@
 (defun listbox-curselection (lbox)
   "Returns the list containing the indices of current selection."
   (let ((r (get-response "~a curselection" (window-path lbox))))
-    (if (string= "" r)
-        ()
-        (mapcar #'parse-integer (split-sequence #\Space r)))))
+    (unless (string= "" r)
+      (mapcar #'parse-integer (split-sequence #\Space r)))))
 
 (defun (setf listbox-curselection) (val lbox)
   "Sets the selecion."

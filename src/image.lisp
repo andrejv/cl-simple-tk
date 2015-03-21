@@ -102,9 +102,7 @@
 
 (defun image-transparency (img x y)
   "Checks if the pixel at X,Y is transparent."
-  (if (string= "1" (get-response "~a transparency get ~a ~a" img x y))
-      t
-      nil))
+  (string= "1" (get-response "~a transparency get ~a ~a" img x y)))
 
 (defun (setf image-transparency) (val img x y)
   "Sets the transparency at pixel X,Y."

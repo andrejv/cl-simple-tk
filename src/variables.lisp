@@ -92,7 +92,7 @@ VAR can be a string or an instance of a tcl variable."
         (:float
          (float (read-from-string (get-variable (tcl-var-name var)))))
         (:boolean
-         (if (string= (get-variable (tcl-var-name var)) "0") nil t))
+         (string= (get-variable (tcl-var-name var)) "1"))
         (otherwise
          (get-variable (tcl-var-name var))))))
 

@@ -226,6 +226,7 @@ call @code{cnv addtag ntag withtag otag}.")
            :message-box
            :notebook
            :notebook-add
+           :notebook-enable-traversal
            :notebook-forget
            :notebook-hide
            :notebook-identify-element
@@ -357,12 +358,19 @@ call @code{cnv addtag ntag withtag otag}.")
            :treeview-next
            :treeview-parent
            :treeview-prev
+           :treeview-see
            :treeview-selection
            :treeview-selection-add
            :treeview-selection-remove
            :treeview-selection-set
            :treeview-selection-toggle
            :treeview-set
+           :treeview-tag-bind
+           :treeview-tag-configure
+           :treeview-tag-has
+           :treeview-tag-names
+           :treeview-tag-add
+           :treeview-tag-remove
            :var-value
            :window-children
            :window-cget

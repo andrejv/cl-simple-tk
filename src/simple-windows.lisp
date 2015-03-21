@@ -122,9 +122,7 @@ If LAST is not specified it deletes one character."
 
 (defun entry-selection-present (ent)
   "Check is some text is selected in ENT."
-  (if (string= (get-response "~a selection present" (window-path ent)) "1")
-      t
-      nil))
+  (string= (get-response "~a selection present" (window-path ent)) "1"))
 
 (defun entry-selection-range (ent start end)
   "Sets the selection in ENT from START ot END."
@@ -136,9 +134,7 @@ If LAST is not specified it deletes one character."
 
 (defun entry-validate (ent)
   "Validates the entry."
-  (if (string= (get-response "~a validate" (window-path ent)) "0")
-      nil
-      t))
+  (string= (get-response "~a validate" (window-path ent)) "1"))
 
 (defun entry-xview (ent)
   "Returns the xview of the window"

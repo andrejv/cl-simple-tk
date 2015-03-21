@@ -34,9 +34,8 @@
 (defun treeview-children (tw item)
   "Returns the list of childtren blonging to ITEM."
   (let ((r (get-response "~a children ~s" (window-path tw) item)))
-    (if (string= "" r)
-        ()
-        (split-sequence #\Space r))))
+    (unless (string= "" r)
+      (split-sequence #\Space r))))
 
 (defun treeview-column-id (tw col)
   "Returns the ID of the column."
@@ -225,12 +224,15 @@ the other columns."
   "Sets the conent of column COL in ITEM."
   (get-response "~a set ~a ~a" (window-path tw) item col (or val "")))
 
+(defun treeview-see (tw item)
+  "Sets the view so that ITEM is visible."
+  (send-command "~a see ~a" (window-path tw) item))
+
 (defun treeview-selection (tw)
   "Returns the list of selected items."
   (let ((r (get-response "~a selection" (window-path tw))))
-    (if (string= r "")
-        ()
-        (split-sequence #\Space r))))
+    (unless (string= r "")
+      (split-sequence #\Space r))))
 
 (defun treeview-selection-set (tw ilist)
   "Sets the selection in TW."
@@ -255,3 +257,47 @@ the other columns."
   (unless (listp ilist)
     (setf ilist (list ilist)))
   (send-command "~a selection toggle {~{~a~^ ~}}" (window-path tw) ilist))
+
+(defun treeview-tag-add (tw tag items)
+  "Adds TAG to ITEMS."
+  (unless (listp items)
+    (setf items (list items)))
+  (send-command "~a tag add ~s {~a~^ }" (window-path tw) tag items))
+
+(defun treeview-tag-remove (tw tag &optional items)
+  "Removes TAG from ITEMS."
+  (if items
+      (progn
+        (unless (listp items)
+          (setf items (list items)))
+        (send-command "~a tag remove ~s {~a~^ }" (window-path tw) tag items))
+      (send-command "~a tag remove ~s" (window-path tw) tag)))
+
+(defun treeview-tag-names (tw)
+  "Returns the list of tags in TW."
+  (let ((r (get-response "~a tag names" (window-path tw))))
+    (unless (string= r "")
+      (split-sequence r #\Space))))
+
+(defun treeview-tag-has (tw tag &optional item)
+  "Check if TAG exists."
+  (string= "1" (get-response "~a tag has ~s ~a"
+                             (window-path tw) tag (or item ""))))
+
+(defun treeview-tag-configure (tw tag &rest options)
+  "Configures the TAG."
+  (loop for (opt val) on options by #'cddr do
+       (send-command "~a tag configure ~a -~a ~a"
+                     (window-path tw)
+                     tag
+                     (key-to-string opt)
+                     (option-to-string val))))
+
+(defun treeview-tab-bind (tw tag ev fun)
+  "Binds FUN to the event EV in items with TAG."
+  (let ((id (string-downcase (format nil "~a.~a.~a" (window-path tw) tag ev))))
+    (send-command "~a bind ~a ~a \{call_lisp ~a %x %y %A %W\}"
+                  (window-path tw) tag ev id)
+    (setf (gethash id *event-table*) fun)))
+
+

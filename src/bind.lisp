@@ -25,7 +25,9 @@
 (defun bind-event (win ev fun)
   "Binds the event EV in window W with function FUN.
 
-Function FUN accepts one argument EVT."
+Function FUN accepts one argument EVT and is called when the event EV
+happens in the window W. FUN can be NIL, in which case it removes the
+binding for EV."
   (let ((id (string-downcase (format nil "~a.~e" (window-path win) ev))))
     (if fun
         (progn
@@ -37,7 +39,10 @@ Function FUN accepts one argument EVT."
           (remhash id *event-table*)))))
 
 (defun bind-class (class ev fun)
-  "Binds the event EVT in all windows of CLASS with function FUN."
+  "Binds the event EVT in all windows of CLASS with function FUN.
+
+FUN is a function with one argument which is called whenever EV
+happend in any window of class CLASS."
   (let ((id (string-downcase (format nil "~a.class.~e" class ev))))
     (send-command "bind ~a ~a \{call_lisp ~a %x %y %A %W\}"
                   class ev id)
@@ -118,27 +123,30 @@ callback."
     (send-command (format nil "proc ~a {args} {call_lisp ~a $args}" tk-name id))))
 
 (defun trace-var (var fun)
-  "Calls fun whenever tcl variable VAR is updated."
+  "Calls FUN whenever the tcl variable VAR is updated."
   (let ((id (format nil "var~a" (next-id))))
     (send-command "trace add variable ~a write {call_lisp ~a}" (tcl-var-name var) id)
     (setf (gethash id *event-table*) fun)))
 
 #+darwin
 (defun tk-mac-about-panel ()
-  "Opens a standard about panel on OSX."
+  "Opens a standard about panel on OSX. The data from in the dialog is
+obtained from the application bundle resources."
   (send-command "::tk::mac::standardAboutPanel"))
 
 #+darwin
 (defun tk-mac-show-help (fun)
-  "Calls the function FUN from the help menu item on OSX."
+  "Calls the function FUN from the help menu item in the help menu on OSX."
   (create-command "::tk::mac::ShowHelp" fun))
 
 #+darwin
 (defun tk-mac-show-preferences (fun)
-  "Calls the function FUN from the preferences menu item on OSX."
+  "Calls the function FUN from the preferences menu item in the
+application menu on OSX."
   (create-command "::tk::mac::ShowPreferences" fun))
 
 #+darwin
 (defun tk-mac-quit (fun)
-  "Calls the function FUN from the quit meni item on OSX."
+  "Calls the function FUN when the quit menu item is selected from the
+application menu on OSX."
   (create-command "::tk::mac::Quit" fun))

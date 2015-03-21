@@ -73,9 +73,7 @@
 
 (defun text-edit-modified (txt)
   "Returns the modified flag."
-  (if (string= "0" (get-response "~a edit modified" (window-path txt)))
-      nil
-      t))
+  (string= "1" (get-response "~a edit modified" (window-path txt))))
 
 (defun (setf text-edit-modified) (val txt)
   "Sets the modified flag."
@@ -143,9 +141,8 @@ The image is specified with the :image option."
 (defun text-image-names (txt)
   "Returns the names of images embedded in TXT."
   (let ((r (get-response "~a image names" (window-path txt))))
-    (if (string= "" r)
-        ()
-        (split-sequence #\Space r))))
+    (unless (string= "" r)
+      (split-sequence #\Space r))))
 
 (defun text-mark-gravity (txt mark)
   "Returns the gracity of the mark MARK."
@@ -154,9 +151,8 @@ The image is specified with the :image option."
 (defun text-mark-names (txt)
   "Returns the marks in the window."
   (let ((r (get-response "~a mark names" (window-path txt))))
-    (if (string= "" r)
-        ()
-        (split-sequence #\Space r)))9)
+    (unless (string= "" r)
+      (split-sequence #\Space r)))9)
 
 (defun text-mark-next (txt ind)
   "Returns the name of the next mark after index IND."
@@ -223,9 +219,8 @@ Function FUN accepts one argument."
 (defun text-tag-names (txt &optional ind)
   "Returns the all tags (at position IND if specified)."
   (let ((r (get-response "~a tag names ~a" (window-path txt) (or ind ""))))
-    (if (string= r "")
-        ()
-        (split-sequence #\Space r))))
+    (unless (string= r "")
+      (split-sequence #\Space r))))
 
 (defun text-tag-raise (txt tid &optional above)
   "Raises the tag TID."
@@ -255,9 +250,8 @@ Function FUN accepts one argument."
 (defun text-window-names (txt)
   "Returns the names of windows embedded in TXT."
   (let ((r (get-response "~a window names" (window-path txt))))
-    (if (string= "" r)
-        ()
-        (split-sequence #\Space r))))
+    (unless (string= "" r)
+      (split-sequence #\Space r))))
 
 (defun text-xview (text)
   "Returns the xview of the window.

@@ -79,3 +79,7 @@ The title of the tab is specified with the TEXT keyword."
   "Returns a list of tabs in N."
   (split-sequence #\Space
                   (get-response "~a tabs" (window-path n))))
+
+(defun notebook-enable-traversal (nb)
+  "Enables keyboard traversal for notebook NB."
+  (send-command "ttk::notebook::enableTraversal ~a" (window-path nb)))

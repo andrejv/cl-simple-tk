@@ -176,10 +176,9 @@ G lis a list of ((w h) x y) or a string \"wxh+x+y\"."
 (defun window-children (w)
   "Returns the list of children of the window W."
   (let ((r (get-response "winfo children ~a" (window-path w))))
-    (if (string= r "")
-        ()
-        (mapcar #'window-from-path
-                (split-sequence #\Space r)))))
+    (unless (string= r "")
+      (mapcar #'window-from-path
+              (split-sequence #\Space r)))))
 
 (defun window-screenwidth (w)
   "Returns the width of the screen on which W is displayed."

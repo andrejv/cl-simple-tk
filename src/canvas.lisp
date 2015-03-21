@@ -156,9 +156,8 @@ Function FUN accepts one argument."
 (defun canvas-find (canvas spec &rest args)
   "Returns ids of all items according to spec."
   (let ((r (get-response "~a find ~a ~{~a~^ ~}" (window-path canvas) spec args)))
-    (if (string= r "")
-        ()
-        (split-sequence #\Space r))))
+    (unless (string= r "")
+      (split-sequence #\Space r))))
 
 (defmacro canvas-find-method ((name args) doc &body body)
   `(defun ,name ,(cons 'canvas args)
@@ -206,9 +205,8 @@ Function FUN accepts one argument."
 (defun canvas-gettags (canvas tid)
   "Returns the ID of the item with keyboard focus."
   (let ((r (get-response "~a gettags ~a" (window-path canvas) tid)))
-    (if (string= r "")
-        ()
-        (split-sequence #\Space r))))
+    (unless (string= r "")
+      (split-sequence #\Space r))))
 
 (defun canvas-icursor (canvas tid ind)
   "Sets the position of cursor in item TID."
