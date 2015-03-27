@@ -240,6 +240,10 @@ the other columns."
     (setf ilist (list ilist)))
   (send-command "~a selection set {~{~a~^ ~}}" (window-path tw) ilist))
 
+(defun (setf treeview-selection) (ilist tw)
+  "Sets the selection in TW."
+  (treeview-selection-set tw ilist))
+
 (defun treeview-selection-add (tw ilist)
   "Adds ILIST to the selection in TW."
   (unless (listp ilist)
