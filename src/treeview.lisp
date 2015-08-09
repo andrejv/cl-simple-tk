@@ -90,6 +90,10 @@ The callback is called when the heading is clicked."
                   (window-path tw) heading id)
     (setf (gethash id *event-table*) fun)))
 
+(defun (setf treeview-heading-command) (fun tw heading)
+  "Sets the callback FUN for HEADING."
+  (treeview-heading-command tw heading fun))
+
 (defun treeview-delete (tw items)
   "Deletes the ITEMS from the treeview."
   (unless (listp items)
